@@ -1,0 +1,5 @@
+/todo
+/.idea
+/vendor
+composer.lock
+composer.phar
