@@ -14,11 +14,15 @@ class BookingDiscount extends Model
         'discount_amount',
         'description',
         'status',
-        'created_by'
+        'created_by',
+        'bill_id'
     ];
 
     protected $table = 'booking_discounts';
-
+    public function bill()
+    {
+        return $this->belongsTo('App\Bill', 'bill_id');
+    }
     public function booking()
     {
         return $this->belongsTo('App\Booking', 'booking_id');

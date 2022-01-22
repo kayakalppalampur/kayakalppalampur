@@ -30,8 +30,14 @@ class OpdTokens extends Model
         'city',
         'state',
         'country',
-        'charges'
+        'charges',
+        'bill_id'
     ];
+
+    public function bill()
+    {
+        return $this->belongsTo('App\Bill', 'bill_id');
+    }
 
     public function booking()
     {

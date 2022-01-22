@@ -44,6 +44,13 @@
         <div class="content_Box">
             <div class="content_BoxIN">
                 @if(!empty($booking))
+                @php
+                    if($discharge === true) {
+                        $dicountsList = $booking->getDiscountsWithoutBill();
+                    }else{
+                        $dicountsList = $booking->discounts;
+                    }
+                @endphp
                     <table class="table ui">
                         <tr>
                             <th>Discount code</th>
@@ -52,7 +59,7 @@
                             <th>Dated</th>
                             <th>Action</th>
                         </tr>
-                        @foreach($booking->discounts as $d)
+                        @foreach($dicountsList as $d)
                             <tr>
                                 <td>{{ $d->discount != null ? $d->discount->code : "" }}</td>
                                 <td>{{ $d->discount_amount }}</td>
@@ -110,13 +117,13 @@
             <div class="content_BoxIN">
                 <form method="POST" id="pay-form" action="{{ url('/admin/booking/pay/'.$booking->id) }}">
                     {!! csrf_field() !!}
-                    <p>Payable Amount: {{ $booking->getPendingAmount($discharge) }}</p>
-                    <p>Refund Amount: {{ $booking->getRefundAmount($discharge) }}</p>
+                    <p>Payable Amount: {{ $booking->getPendingAmountWithoutBill($discharge) }}</p>
+                    <p>Refund Amount: {{ $booking->getRefundAmountWithoutBill($discharge) }}</p>
 
-                    <input type="hidden" id="amount_paid" value="{{ $booking->getRefundAmount($discharge) }}"/>
+                    <input type="hidden" id="amount_paid" value="{{ $booking->getRefundAmountWithoutBill($discharge) }}"/>
                     <div class="form-group">
                         <input type="text" class="form-control" id="amount" value="" placeHolder="Amount to be paid"
-                               max="{{ $booking->getPendingAmount($discharge) }}" style="width:50%" name="amount"/>
+                               max="{{ $booking->getPendingAmountWithoutBill($discharge) }}" style="width:50%" name="amount"/>
                         <br/>
                         <textarea cols="41" class="form-control" name="description" placeholder="Comments"></textarea>
                         <input type="hidden" name="user_id" value="{{ $user->id }}">

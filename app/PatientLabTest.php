@@ -29,11 +29,17 @@ class PatientLabTest extends Model
         'price',
         'test_status',
         'lab_report',
-        'report_type'
+        'report_type',
+        'bill_id'
     ];
 
-
     protected $table = 'patient_lab_tests';
+
+    public function bill()
+    {
+        return $this->belongsTo('App\Bill', 'bill_id');
+    }
+
     protected $appends = [
         'date_date',
     ];

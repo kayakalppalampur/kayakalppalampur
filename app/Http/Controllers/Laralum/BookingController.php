@@ -54,6 +54,7 @@ use App\AdminSetting;
 use App\UserExtraService;
 use App\State;
 use App\Country;
+use App\PatientLabTest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Input;
@@ -3676,10 +3677,21 @@ or search by other options";
           }*/
         $user = $booking->user;
         $discount = true;
-        $discharge = true;
+        $discharge = false;
         return view('laralum.booking.get-booking-info', compact('user', 'discount', 'booking', 'discharge'));
     }
 
+    public function getDiscountDetailsWithoutBill($id)
+    {
+        $booking = Booking::find($id);
+        /*  if (!$booking->isAllowed()) {
+              abort(401, "You don't have permissions to access this area");
+          }*/
+        $user = $booking->user;
+        $discount = true;
+        $discharge = true;
+        return view('laralum.booking.get-booking-info', compact('user', 'discount', 'booking', 'discharge'));
+    }
     public function addDiscount($id)
     {
         $booking = Booking::find($id);
@@ -4030,6 +4042,11 @@ or search by other options";
 
                 return view('laralum.booking.print-noc', $data);
             }
+            if($request->get('generate_bill') == 1) {
+               $bill = $booking->generateBill();
+               $data['bill'] = $bill;
+               return view('laralum.booking.print-generated-bill', $data);
+            }
 
             return view('laralum.booking.print-bill', $data);
         }
@@ -4108,18 +4125,27 @@ or search by other options";
         //return "here";
         //return $page;
         $booking = Booking::find($id);
-        $user = $booking->user;/*
-        $user = User::find($id);*/
-        $treatments = $booking->getTreatments();
-        $discharge = true;
+        $user = $booking->user;
+        $discharge = false;
+        if($page === 'discharge'){
+            $treatments = $booking->getTreatmentsWithoutBill();
+            $discharge = true;
+        }else{
+            $treatments = $booking->getTreatments();
+        }
         return view('laralum.booking.get-booking-info', compact('treatments', 'user', 'booking', 'discharge','page'));
     }
 
     public function getTreatmentDetailsPrint($page,$id){
         $booking = Booking::find($id);
         $user = $booking->user;
-        $treatments = $booking->getTreatments();
-        $discharge = true;
+        $discharge = false;
+        if($page === 'discharge'){
+            $treatments = $booking->getTreatmentsWithoutBill();
+            $discharge = true;
+        }else{
+            $treatments = $booking->getTreatments();
+        }
         return view('laralum.booking.print-treatment-details', compact('booking', 'user', 'treatments', 'discharge','page'));
         //return "yo";
     }
@@ -4127,7 +4153,7 @@ or search by other options";
     public function checkTreatmentStatus($id){
         //return "yo";
         $booking = Booking::find($id);
-        return $booking->getTreatmentsAmount();
+        return $booking->getTreatmentsWithoutBill();
 
     }
 
@@ -4139,25 +4165,38 @@ or search by other options";
           }*/
         $user = $booking->user;/*
         $user = User::find($id);*/
-        $lab_tests = $booking->labTests;
+        // $lab_tests = $booking->labTests;
+
+        $lab_tests = PatientLabTest::where('booking_id', $booking->id)->doesntHave('bill')->where('created_at', '<=', date('Y-m-d H:i:s'))->get();
+      
         return view('laralum.booking.get-booking-info', compact('treatments', 'user', 'booking', 'lab_tests', 'discharge'));
     }
 
     public function  getallLabDetails($page,$booking_id){
         $booking = Booking::find($booking_id);
         $user = $booking->user;
-        $all_lab_tests = $booking->labTests;
-        $discharge = true;
+       
+        $discharge = false;
+        if($page === 'discharge'){
+            $discharge = true;
+            $all_lab_tests = PatientLabTest::where('booking_id', $booking->id)->doesntHave('bill')->where('created_at', '<=', date('Y-m-d H:i:s'))->get();      
+        }else{
+            $all_lab_tests = $booking->labTests;
+        }
         return view('laralum.booking.get-booking-info', compact('user', 'booking', 'all_lab_tests', 'discharge', 'page'));
     }
 
     public function getLabDetailsPrint($page,$booking_id){
         $booking = Booking::find($booking_id);
         $user = $booking->user;
-        $all_lab_tests = $booking->labTests;
-        $discharge = true;
+        $discharge = false;
+        if($page === 'discharge'){
+            $discharge = true;
+            $all_lab_tests = PatientLabTest::where('booking_id', $booking->id)->doesntHave('bill')->where('created_at', '<=', date('Y-m-d H:i:s'))->get();      
+        }else{
+            $all_lab_tests = $booking->labTests;
+        }
         return view('laralum.booking.print-lab-details', compact('user', 'booking', 'all_lab_tests', 'discharge', 'page'));
-        //return "yo";
     }
 
     public function exportTokens(Request $request, $type, $per_page = 10, $page = 1)

@@ -32,10 +32,16 @@ class TreatmentToken extends Model
         'weight',
         'status',
         'is_special',
-        'booking_id'
+        'booking_id',
+        'bill_id'
     ];
 
     protected $table = 'treatment_tokens';
+    
+    public function bill()
+    {
+        return $this->belongsTo('App\Bill', 'bill_id');
+    }
 
     protected $appends = [
         'treatment_date_date',

@@ -99,6 +99,8 @@
                                         <form class="token" method="POST" id="print-form"
                                               action="{{ url('/admin/booking/print-bill/'.$booking->id) }}">
                                             {!! csrf_field() !!}
+
+                                            <input type="hidden" name="generate_bill" id="generate_bill" value="0">
                                             <div class="token-sec-form">
                                                 <div class="form-group">
                                                     <div class="col-2"><label>Allocate token to</label></div>
@@ -133,7 +135,7 @@
                                             <div class="form-group">
                                                 <div class="col-2"><label>Consultation Charges</label></div>
                                                 <div class="col-10">
-                                                    <p>{{ $booking->getConsultationAmount(true, true) }}</p>
+                                                    <p>{{ $booking->getConsultationAmountWithoutBill() }}</p>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -179,8 +181,8 @@
                                             <div class="form-group">
                                                 <div class="col-2"><label> Diet </label></div>
                                                 <div class="col-10">
-                                                    <p>{{  $booking->getDietAmount() }}</p>
-                                                    @if($booking->diets->count() > 0)
+                                                    <p>{{  $booking->getDietAmountWithoutBill() }}</p>
+                                                    @if($booking->getDietsWithoutBills()->count() > 0)
                                                         <div class="row">
                                                             <div class="table-responsive">
                                                                 <table class="table ui">
@@ -188,7 +190,7 @@
                                                                         <th>Date</th>
                                                                         <th>Price</th>
                                                                     </tr>
-                                                                    @foreach($booking->diets as $diet)
+                                                                    @foreach($booking->getDietsWithoutBills() as $diet)
                                                                         @if(count($diet->dailyDiets) > 0)
                                                                             @foreach($diet->dailyDiets as $daily_diet)
                                                                                 <tr>
@@ -263,10 +265,10 @@ if ($daily_diet != null) {
                                             <div class="form-group">
                                                 <div class="col-2"><label> Treatments </label></div>
                                                 <div class="col-10 token-amount">
-                                                <div class="total_treatment_price" style="display: none;">{{  $booking->getTreatmentsAmount() }}</div>
+                                                <div class="total_treatment_price" style="display: none;">{{  $booking->getTreatmentsAmountWithoutBill() }}</div>
                                                     @foreach(\App\Department::all() as $department)
                                                         <p>{{ $department->title }}</p>
-                                                        <p>{{  $booking->getTreatmentsAmount($department->id) }}</p>
+                                                        <p>{{  $booking->getTreatmentsAmountWithoutBill($department->id) }}</p>
 
                                                         <!-- @if($booking->getTreatments($department->id)->count() > 0)
                                                             <div class="row">
@@ -288,7 +290,7 @@ if ($daily_diet != null) {
                                                         
                                                         <br>
                                                     @endforeach
-                                                    @if($booking->getTreatments()->count() > 0)<br>
+                                                    @if($booking->getTreatmentsWithoutBill()->count() > 0)<br>
                                                         <div class="right-acc">
                                                             <button id="treatment_details">Show Treatments</button>
                                                         </div>
@@ -298,9 +300,9 @@ if ($daily_diet != null) {
                                             <div class="form-group">
                                                 <div class="col-2"><label> Lab </label></div>
                                                 <div class="col-10">
-                                                    <p>{{ $booking->getLabAmount() }}</p>
+                                                    <p>{{ $booking->getLabAmountWithoutBill() }}</p>
 
-                                                     @if($booking->labTests->count() > 0)
+                                                     @if($booking->labTestsWithoutBill()->count() > 0)
                                                                 <br>
                                                                         <div class="right-acc">
                                                                             <button id="lab_details">Show Lab Tests</button>
@@ -339,15 +341,15 @@ if ($daily_diet != null) {
                                             <div class="form-group">
                                                 <div class="col-2"><label> Total Amount </label></div>
                                                 <div class="col-10">
-                                                    <p>{{ $booking->getTotalAmount(true) }}</p>
+                                                    <p>{{ $booking->getTotalAmountWithoutBill(true) }}</p>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="col-2"><label> Discounts </label></div>
                                                 <div class="col-10 token-amount">
-                                                    <p>{{ $booking->getDiscountsAmount() }}</p>
+                                                    <p>{{ $booking->getDiscountsAmountWithoutBill() }}</p>
                                                     <div class="right-acc">
-                                                        @if($booking->discounts->count() > 0)
+                                                        @if($booking->getDiscountsWithoutBill()->count() > 0)
                                                             <div class="row">
                                                                 <div class="table-responsive">
                                                                     <table class="table ui">
@@ -358,7 +360,7 @@ if ($daily_diet != null) {
                                                                             <th>Dated</th>
                                                                             <th>Action</th>
                                                                         </tr>
-                                                                        @foreach($booking->discounts as $d)
+                                                                        @foreach($booking->getDiscountsWithoutBill() as $d)
                                                                             <tr>
                                                                                 <td>{{ $d->discount != null ? $d->discount->code : "" }}</td>
                                                                                 <td>{{ $d->discount_amount }}</td>
@@ -389,17 +391,17 @@ if ($daily_diet != null) {
                                             <div class="form-group">
                                                 <div class="col-2"><label> Payable Amount </label></div>
                                                 <div class="col-10">
-                                                    <p>{{ $booking->getPayableAmount(true) }}</p></div>
+                                                    <p>{{ $booking->getPayableAmountWithoutBill() }}</p></div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="col-2"><label> Already Paid </label></div>
                                                 <div class="col-10">
 
-                                                    <p>{{ $booking->getPaidAmount() }}</p>
-                                                    @if($booking->paidItems->count() > 0)
+                                                    <p>{{ $booking->getPaidAmountWithoutBill() }}</p>
+                                                    @if($booking->paidItemsWithoutBill->count() > 0)
                                                         <div class="row">
                                                             <div class="table-responsive">
-                                                                @foreach($booking->paidItems as $item)
+                                                                @foreach($booking->paidItemsWithoutBill as $item)
                                                                     <p>
                                                                         <span style="margin:10px ;">Paid Amount: {{ $item->amount }}</span><span>Paid Date: {{ date('d-m-Y h:i a', strtotime($item->created_at)) }}</span>
                                                                     </p>
@@ -418,26 +420,26 @@ if ($daily_diet != null) {
                                                         </div>
                                                 </div>
 
-                                                @if($booking->getPaidAmount(true) > 0)
+                                                @if($booking->getPaidAmountWithoutBill(true) > 0)
                                                     <div class="form-group">
                                                         <div class="col-2"><label> Total Refunded </label>
                                                         </div>
                                                         <div class="col-10">
-                                                            <p>{{ $booking->getPaidAmount(true)  }}</p>
+                                                            <p>{{ $booking->getPaidAmountWithoutBill(true)  }}</p>
                                                         </div>
                                                     </div>
                                                 @endif
                                                 <div class="form-group">
                                                     <div class="col-2"><label> Total Due </label></div>
                                                     <div class="col-10">
-                                                        <p>{{ $booking->getPendingAmount(true) }}</p></div>
+                                                        <p>{{ $booking->getPendingAmountWithoutBill() }}</p></div> Note: This amount includes any dues pending.
                                                 </div>
 
                                                 <div class="form-group">
                                                     <div class="col-2"><label> Total Refundable </label>
                                                     </div>
                                                     <div class="col-10">
-                                                        <p>{{ $booking->getRefundAmount(true)  }}</p></div>
+                                                        <p>{{ $booking->getRefundAmountWithoutBill()  }}</p></div>
                                                 </div>
 
 
@@ -446,7 +448,7 @@ if ($daily_diet != null) {
                                                     <button value="pay" id="pay" class="ui button no-disable">
                                                         Pay/Refund
                                                     </button>
-                                                    <button id="print" class="ui button no-disable">Print the Bill
+                                                    <button id="print"  value="print" class="ui button no-disable">Print the Bill
                                                     </button>
                                                     <button id="feedback-form" class="ui button no-disable">Fill
                                                         Feedback Form
@@ -513,7 +515,7 @@ if ($daily_diet != null) {
     <script>
         $("#extra_details").click(function (e) {
             e.preventDefault();
-            console.log("asdsa");
+            
             // var pageName = $(this).attr('pageName');
             var url = '{{ url('/admin/booking/get-services-billing-details/'.$booking->id.'/'.true) }}';
             var title = "Extra Services Details";
@@ -522,7 +524,7 @@ if ($daily_diet != null) {
 
         $("#accommodation_details").click(function (e) {
             e.preventDefault();
-            console.log("asdsa");
+            
             // var pageName = $(this).attr('pageName');
             var url = '{{ url('/admin/booking/get-accommodation-billing-details/'.$booking->id.'/'.true) }}';
             var title = "Accommodation Details";
@@ -531,7 +533,6 @@ if ($daily_diet != null) {
 
         $("#already_paid_details").click(function (e) {
             e.preventDefault();
-            console.log("asdsa");
             // var pageName = $(this).attr('pageName');
             var url = '{{ url('/admin/booking/get-paid-billing-details/'.$booking->id) }}';
             var title = "Already Paid";
@@ -540,7 +541,7 @@ if ($daily_diet != null) {
 
         $("#feedback-form").click(function (e) {
             e.preventDefault();
-            console.log("asdsa");
+            
             // var pageName = $(this).attr('pageName');
             var url = '{{ url('/admin/user/get-feedback/'.$booking->id) }}';
             var title = "Give your feedback";
@@ -549,7 +550,7 @@ if ($daily_diet != null) {
 
         $("#diet_details").click(function (e) {
             e.preventDefault();
-            console.log("asdsa");
+            
             // var pageName = $(this).attr('pageName');
             var url = '{{ url('/admin/user/get-diet-details/'.$booking->id) }}';
             var title = "Diet Price Chart";
@@ -558,7 +559,7 @@ if ($daily_diet != null) {
 
         $("#treatment_details").click(function (e) {
             e.preventDefault();
-            console.log("asdsa");
+            
             // var pageName = $(this).attr('pageName');
             var url = '{{ url('/admin/user/get-treatments-details/discharge/'.$booking->id) }}';
             var title = "Treatments Details";
@@ -574,7 +575,7 @@ if ($daily_diet != null) {
 
         /*$("#lab_details").click(function (e) {
             e.preventDefault();
-            console.log("asdsa");
+            
             // var pageName = $(this).attr('pageName');
             var url = '{{ url('/admin/user/get-lab-details/'.$booking->id.'/'.true) }}';
             var title = "Lab Details";
@@ -632,7 +633,7 @@ if ($daily_diet != null) {
         $("#discount_details").click(function (e) {
             e.preventDefault();
             // var pageName = $(this).attr('pageName');
-            var url = '{{ url('/admin/booking/get-discount-details/'.$booking->id) }}';
+            var url = '{{ url('/admin/booking/get-discount-details-discharge/'.$booking->id) }}';
             var title = "Discount Details";
             openModal(url, title);
         });
@@ -654,7 +655,7 @@ if ($daily_diet != null) {
 
         $(document).ready(function () {
             var total_treatment_price = $('.total_treatment_price').html();
-            setInterval(checkstatus, 2000);
+             setInterval(checkstatus, 2000);
         
             function checkstatus(){
                 var booking_id = {{ $booking->id }};
@@ -673,6 +674,15 @@ if ($daily_diet != null) {
             };
 
         });
+
+
+        $("#print").click(function(e) {
+            e.preventDefault();
+            if (confirm("This action will generate a new bill, Do you want to continue?")){
+                $("#generate_bill").val("1");
+                $("#print-form").submit();
+            }
+        })
 
         /*$("#print").click(function (e) {
          /!*e.preventDefault();*!/

@@ -1100,6 +1100,23 @@ Route::group(['middleware' => ['auth', 'laralum.base', 'laralum.auth'], 'prefix'
     Route::post('/booking/pay/{booking_id}', 'BookingController@payDueAmountStore')->name('bookings.pay-discount-store');
 
 
+    #Bills routes
+    Route::get('/bills', 'BillController@index')->name('bills');
+    
+    Route::post('/bills', 'BillController@ajaxUpdate')->name('bills.ajax');
+    
+    Route::get('/bill/view/{bill_id}', 'BillController@view')->name('bills.view');
+    Route::get('/bill/{id}/delete', 'SecurityController@confirm')->name('bills.delete');
+    Route::post('/bill/{id}/delete', 'BillController@destroy');
+    Route::post('/bills', 'BillController@ajaxUpdate');
+    Route::get('/bills/print', 'BillController@printBills')->name('bills.print');    
+    Route::get('/bill/{id}/print', 'BillController@print')->name('bills.bill_print');
+    Route::get('/bills/export/{type}', 'BillController@exportBills')->name('bills.export');
+
+    Route::get('/booking/get-discount-details-discharge/{booking_id}', 'BookingController@getDiscountDetailsWithoutBill')->name('bookings.discount-details');
+   
+
+
 //Misc routes
  Route::post('/booking/save-misc', 'BookingController@saveMisc')->name('bookings.save-misc');
 
