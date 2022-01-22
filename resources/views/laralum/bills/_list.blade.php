@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 @php
     $bill_amount = 0;
@@ -14,8 +13,6 @@
 
 
 
-=======
->>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
 @if(!isset($print))
     <div class="column table_top_btn">
         <div class="btn-group pull-right">
@@ -47,7 +44,6 @@
     </div>
 @endif
 
-<<<<<<< HEAD
     @if(!isset($print))
 <div class="row">
 <div class="col-md-3">
@@ -67,21 +63,6 @@
 
 @endif
 
-=======
-@if(!isset($print))
-    <div class="column table_top_btn">
-        <div class="btn-group pull-right">
-            <div class="item no-disable">
-                <a style="color:white" href="{{ url("admin/bill/create") }}">
-                    <div tabindex="0" class="ui secondary top labeled icon left  button responsive-button">
-                        <i class="plus icon"></i><span class="text responsive-text">Create Bill</span>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
-@endif
->>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
 @if(count($bills) > 0)
     {{csrf_field()}}
     @if(!isset($print))
@@ -91,18 +72,12 @@
         </div>
     </div>
     @endif
-<<<<<<< HEAD
     
-=======
-
-
->>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
     <div class="table-responsive table_sec_row">
         <table class="ui table table_cus_v last_row_bdr"
                data-action="{{ url('admin/bills') }}?page={{ @$_REQUEST['page'] }}&per_page={{ @$_REQUEST['per_page'] }}">
             <thead>
             <tr>
-<<<<<<< HEAD
                 <th>Bill Date</th>
                 <th>Bill No.</th>
                 <th>Name</th>
@@ -114,10 +89,6 @@
                 <th>Ayurveda</th>
                 <th>Lab</th>
                 <th>Room Rent</th>
-=======
-                <th>Title</th>
-                <th>Description</th>
->>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
                 @if(!isset($print))
                     <th>Actions</th>
                 @endif
@@ -127,7 +98,6 @@
             @if(!isset($print))
                 <tr class="table_search">
 
-<<<<<<< HEAD
                 <td class="icons">
                     <input type="text" class="table_search" id="table_search_bill_date"
                            value="{{ @$search_data['bill_date'] }}"
@@ -161,14 +131,6 @@
                     </td>
                     <td>
                         &nbsp;
-=======
-                    <td class="icons">
-                        <input type="text" class="table_search" id="table_search_title"
-                               value="{{ @$search_data['title'] }}"
-                               name="slug"
-                               placeholder="search title"/> <i
-                                class="fa fa-filter"></i>
->>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
                     </td>
                     <td>
                         &nbsp;
@@ -177,7 +139,6 @@
                 </tr>
             @endif
             @foreach($bills as $bill)
-<<<<<<< HEAD
             @php
                 $bill_amount = $bill_amount + $bill->bill_amount;
                 $discount = $discount + $bill->discount;
@@ -216,45 +177,11 @@
                                         </a>
                                     @endif
                                 </div>
-=======
-                <tr>
-                    <td>{{ $bill->title }}</td>
-                    <td>{{ $bill->description }}</td>
-                    @if(!isset($print))
-                        <td>
-                            <div id="book-table" class="ui  top icon blue left pointing dropdown button">
-                                <i class="configure icon"></i>
-                                <div class="menu">
-                                    @if(Laralum::loggedInUser()->hasPermission('admin.doctor_bills.list'))
-                                        <div class="header">{{ trans('laralum.editing_options') }}</div>
-                                        <a href="{{ route('Laralum::bill_edit', ['id' => $bill->id]) }}"
-                                           class="item no-disable">
-                                            <i class="edit icon"></i>
-                                            {{ trans('laralum.edit_bill') }}
-                                        </a>
-                                    @endif
-                                    @if(Laralum::loggedInUser()->hasPermission('admin.doctor_bills.list'))
-                                        <div class="header">{{ trans('laralum.advanced_options') }}</div>
-                                        <a href="{{ route('Laralum::bill_delete', ['id' => $bill->id]) }}"
-                                           class="item no-disable">
-                                            <i class="trash bin icon"></i>
-                                            {{ trans('laralum.delete_bill') }}
-                                        </a>
-                                    @endif
-                                </div>
-                            </div>
-                            {{--  @else
-                                  <div class="ui disabled blue icon button">
-                                      <i class="lock icon"></i>
-                                  </div>
-                              @endif--}}
->>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
                         </td>
                     @endif
                 </tr>
             @endforeach
             </tbody>
-<<<<<<< HEAD
             <tfoot>
             <td class="icons">
                     <b>Grand Total</b>
@@ -291,8 +218,6 @@
                     </td>
                     <td>&nbsp;</td>
             </tfoot>
-=======
->>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
         </table>
     </div>
     @if(!isset($print))
@@ -308,7 +233,6 @@
                data-action="{{ url('admin/bills') }}?page={{ @$_REQUEST['page'] }}&per_page={{ @$_REQUEST['per_page'] }}">
             <thead>
             <tr>
-<<<<<<< HEAD
             <th>Bill Date</th>
                 <th>Bill No.</th>
                 <th>Name</th>
@@ -320,10 +244,6 @@
                 <th>Ayurveda</th>
                 <th>Lab</th>
                 <th>Room Rent</th>
-=======
-                <th>Title</th>
-                <th>Description</th>
->>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
                 @if(!isset($print))
                     <th>Actions</th>
                 @endif
@@ -331,7 +251,6 @@
             </thead>
             <tbody>
             @if(!isset($print))
-<<<<<<< HEAD
             <td class="icons">
                     <input type="text" class="table_search" id="table_search_bill_date"
                            value="{{ @$search_data['bill_date'] }}"
@@ -341,20 +260,10 @@
                 </td>
                     <td>
                         &nbsp;
-=======
-                <tr class="table_search">
-                    <td class="icons">
-                        <input type="text" class="table_search" id="table_search_title"
-                               value="{{ @$search_data['title'] }}"
-                               name="slug"
-                               placeholder="search title"/> <i
-                                class="fa fa-filter"></i>
->>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
                     </td>
                     <td>
                         &nbsp;
                     </td>
-<<<<<<< HEAD
                     <td>
                         &nbsp;
                     </td>
@@ -380,11 +289,6 @@
                         &nbsp;
                     </td>
                     <td>&nbsp;</td>
-=======
-                    @if(!isset($print))
-                        <td>&nbsp;</td>
-                    @endif
->>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
                 </tr>
             @endif
             <tr>

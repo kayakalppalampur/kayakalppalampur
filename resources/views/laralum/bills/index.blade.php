@@ -10,13 +10,9 @@
 @section('content')
     <div class="ui one column doubling stackable grid">
         <div class="column">
-<<<<<<< HEAD
             <div class="ui very padded segment table_header_row table-responsive" id="bills_list">
            
 
-=======
-            <div class="ui very padded segment table_header_row table-responsive" id="department_list">
->>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
                @include('laralum.bills._list')
             </div>
         </div>
@@ -24,7 +20,6 @@
 @endsection
 
 
-<<<<<<< HEAD
 @section('fsfsfsd')
 <script type="text/javascript"> 
     $document.ready(function() {
@@ -47,5 +42,3 @@
     }
 </script>
 @endsection
-=======
->>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
