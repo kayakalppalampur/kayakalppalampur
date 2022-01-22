@@ -25,9 +25,15 @@ class Wallet extends Model
         'status',
         'payment_method',
         'booking_id',
-        'description'
+        'description',
+        'bill_id'
     ];
     protected $table = 'wallet';
+
+    public function bill()
+    {
+        return $this->belongsTo('App\Bill', 'bill_id');
+    }
 
     public function patient()
     {

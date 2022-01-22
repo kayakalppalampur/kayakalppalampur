@@ -618,8 +618,8 @@ class Settings extends Model
             $treatment_routes_ar = Treatment::getRoutesArray();
             $lab_routes_ar = LabTest::getRoutesArray();
             $admin_settings_ar = AdminSetting::getRoutesArray();
-
-            $routes_ar = array_merge($admin_settings_ar, $lab_routes_ar, $treatment_routes_ar, $feedback_routes_ar, $temp_routes_ar, $disc_routes_ar, $consult_routes_ar, $tax_routes_ar, $routes_ar, $per_routes_ar, $bank_routes_ar, $info_routes_ar);
+            $bills_ar = Bill::getRoutesArray();
+            $routes_ar = array_merge($bills_ar, $admin_settings_ar, $lab_routes_ar, $treatment_routes_ar, $feedback_routes_ar, $temp_routes_ar, $disc_routes_ar, $consult_routes_ar, $tax_routes_ar, $routes_ar, $per_routes_ar, $bank_routes_ar, $info_routes_ar);
             return self::getClass($routes_ar, $sub);
         }
 

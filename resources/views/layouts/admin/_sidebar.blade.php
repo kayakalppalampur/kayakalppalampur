@@ -382,6 +382,11 @@
             <a href="{{ route('Laralum::price-settings') }}" class="item {{ \App\Settings::getActiveClass('admin.admin_settings.price_settings', true) }}">Price Setting</a>
                 @endif
 
+                @if(Laralum::loggedInUser()->hasPermission('admin.admin_settings.bills'))
+                <a href="{{ route('Laralum::bills') }}"
+                   class="item {{ \App\Settings::getActiveClass('admin.admin_settings.bills', true) }}">Bills
+                </a>
+            @endif
 
 
 

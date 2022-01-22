@@ -13,9 +13,15 @@ class Misc extends Model
         'name',
         'price',
         'booking_id',
+        'bill_id'
     ];
 
     protected $table = 'miscs';
+
+    public function bill()
+    {
+        return $this->belongsTo('App\Bill', 'bill_id');
+    }
 
     public static function getRules()
     {

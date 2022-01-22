@@ -72,7 +72,7 @@ class Booking extends Model
 
     public function getBuildingNameAttribute()
     {
-        return $this->building->name;
+        return $this->building ? $this->building->name : '';
     }
 
     public function getBuildingFloorNameAttribute()
@@ -889,6 +889,16 @@ class Booking extends Model
         return $this->hasMany(ApplyRecommendExcercise::class, 'booking_id');
     }
 
+    public function bills()
+    {
+        return $this->hasMany(Bill::class, 'booking_id');
+    }
+
+    public function lastBill() {
+        $bill = Bill::orderBy('id', 'desc')->where('booking_id', $this->id)->first();
+        return $bill;
+    }
+
     public function rules()
     {
         return [
@@ -1638,9 +1648,32 @@ class Booking extends Model
         return 0;
     }
 
+    public function getPendingAmountWithoutBill($discharge = false)
+    {
+        $payable = $this->getPayableAmountWithoutBill();
+        $paid = $this->getPaidAmountWithoutBill();
+        $refund = $this->getPaidAmountWithoutBill(true);
+        $payable = $payable + $refund;
+
+        //Get previous bills remaining amount
+        $remaining_bill = $this->lastBill();
+        if($remaining_bill) {
+            $payable = $payable + $remaining_bill->remaining_amount;
+        }
+
+        if ($paid < $payable) {
+            return $payable - $paid;
+        }
+
+        return 0;
+    }
     public function getPayableAmount($discharge = false)
     {
         return $this->getTotalAmount($discharge) - $this->getDiscountsAmount();
+    }
+
+    public function getPayableAmountWithoutBill() {
+        return $this->getTotalAmountWithoutBill(true) - $this->getDiscountsAmountWithoutBill();
     }
 
     public function getTotalAmount($discharge = false)
@@ -1655,6 +1688,21 @@ class Booking extends Model
  	$misc = $this->getMiscAmount();
         $total = $accomodation + $diet + $treatments + $lab + $consult + $misc;
 
+        return $total;
+    }
+    public function getTotalAmountWithoutBill($discharge = false)
+    {
+        $accomodation = $this->getAccomodationAmount($discharge, true);
+       
+        //$service = $this->getServicesAmount($discharge);
+        $diet = $this->getDietAmountWithoutBill();
+        $treatments = $this->getTreatmentsAmountWithoutBill();
+        $lab = $this->getLabAmountWithoutBill();
+        //$consult = ConsultationCharge::getConsultFees();
+        $consult = $this->getConsultationAmountWithoutBill($discharge, true);
+ 	    $misc = $this->getMiscAmountWithoutBill();
+        $total = $accomodation + $diet + $treatments + $lab + $consult + $misc;
+     
         return $total;
     }
 
@@ -1716,6 +1764,26 @@ class Booking extends Model
         return $price;
     }
 
+    public function getDietAmountWithoutBill()
+    {
+        $diets = $this->getDietsWithoutBills();
+        $price = 0;
+        foreach ($diets as $diet) {
+            $diet_daily_items = DietDailyStatus::where('diet_id', $diet->id)->get();
+
+            foreach ($diet_daily_items as $item) {
+                $price = $price + $item->getTotalAmount();
+            }
+        }
+        return $price;
+    }
+
+    public function getDietsWithoutBills()
+    {
+        $diets = DietChart::doesntHave('bill')->where('booking_id', $this->id)->where('created_at', '<=', date('Y-m-d H:i:s'))->get();
+        return $diets;
+    }
+
     public function diets()
     {
 
@@ -1760,9 +1828,44 @@ class Booking extends Model
         return $treatments;
     }
 
+    public function getTreatmentsAmountWithoutBill($department_id = null)
+    {
+        $treatment_tokens = $this->getTreatmentsWithoutBill($department_id);
+        $price = 0;
+        if ($treatment_tokens->count() > 0) {
+            foreach ($treatment_tokens as $treatment_token) {
+                $treatments = $treatment_token->treatments;
+                if ($treatments->count() > 0) {
+                    foreach ($treatments as $treatment) {
+                        if ($treatment->status == PatientTreatment::STATUS_COMPLETED) {
+                            $price = $price + $treatment->price;
+                        }
+                    }
+                }
+            }
+        }
+        return $price;
+    }
+
+    public function getTreatmentsWithoutBill($department_id = null)
+    {
+        $treatments = TreatmentToken::doesntHave('bill')->where('booking_id', $this->id)->where('created_at', '<=', date('Y-m-d H:i:s'));
+
+        if ($department_id != null) {
+            $treatments = $treatments->where('department_id', $department_id);
+        }
+        $treatments = $treatments->get();
+        return $treatments;
+    }
+
     public function paidItems()
     {
         return $this->hasMany(Wallet::class, 'booking_id')->where('status', Wallet::STATUS_PAID)->where('type', Wallet::TYPE_PAID);
+    }
+
+    public function paidItemsWithoutBill()
+    {
+        return $this->hasMany(Wallet::class, 'booking_id')->where('status', Wallet::STATUS_PAID)->where('type', Wallet::TYPE_PAID)->doesntHave('bill')->where('created_at', '<=', date('Y-m-d H:i:s'));
     }
 
     public function pendingItems()
@@ -1782,15 +1885,43 @@ class Booking extends Model
         return $am;
     }
 
+    public function getLabAmountWithoutBill($discharge = false)
+    {
+        $lab_tests = PatientLabTest::where('booking_id', $this->id)->doesntHave('bill')->where('created_at', '<=', date('Y-m-d H:i:s'))->get();
+        $am = 0;
+
+        foreach ($lab_tests as $lab_test) {
+            $am = $am + $lab_test->getPrice($discharge);
+        }
+
+        return $am;
+    }
+
+    public function labTestsWithoutBill() {
+        $lab_tests = PatientLabTest::where('booking_id', $this->id)->doesntHave('bill')->where('created_at', '<=', date('Y-m-d H:i:s'))->get();
+      
+        return $lab_tests;
+    }
+
 	public function getMiscAmount() 
 	{
-$misc = Misc::where('booking_id', $this->id)->first();
+        $misc = Misc::where('booking_id', $this->id)->first();
 
 		if ($misc) {
 			return $misc->price;
 		}
 		return 0;
 
+	}
+
+    public function getMiscAmountWithoutBill() 
+	{
+        $misc = Misc::where('booking_id', $this->id)->doesntHave('bill')->where('created_at', '<=', date('Y-m-d H:i:s'))->first();
+
+		if ($misc) {
+			return $misc->price;
+		}
+		return 0;
 	}
 
     public function getDiscountsAmount()
@@ -1804,6 +1935,23 @@ $misc = Misc::where('booking_id', $this->id)->first();
         return $price;
     }
 
+    public function getDiscountsAmountWithoutBill()
+    {
+        $price = 0;
+        $discounts = BookingDiscount::where('booking_id', $this->id)->doesntHave('bill')->where('created_at', '<=', date('Y-m-d H:i:s'))->get();
+        if ($discounts->count() > 0) {
+            foreach ($discounts as $discount) {
+                $price = $price + $discount->discount_amount;
+            }
+        }
+        return $price;
+    }
+
+    public function getDiscountsWithoutBill()
+    {
+        $discounts = BookingDiscount::where('booking_id', $this->id)->doesntHave('bill')->where('created_at', '<=', date('Y-m-d H:i:s'))->get();
+        return $discounts;
+    }
 
     public function getPendingStatusAmount()
     {
@@ -1817,6 +1965,29 @@ $misc = Misc::where('booking_id', $this->id)->first();
         }
 
         return 0;
+    }
+
+    public function getPaidAmountWithoutBill($refund = false)
+    {
+        $payments = Wallet::doesntHave('bill')->where([
+            'booking_id' => $this->id,
+            'status' => Wallet::STATUS_PAID
+        ])->where('created_at', '<=', date('Y-m-d H:i:s'))->get();
+
+        $price = 0;
+        if ($payments->count() > 0) {
+            foreach ($payments as $payment) {
+                if ($refund == false) {
+                    if ($payment->type == Wallet::TYPE_PAID) {
+                        $price = $price + $payment->amount;
+                    }
+                } elseif ($payment->type == Wallet::TYPE_REFUND) {
+                    $price = $price + (int)$payment->amount;
+                }
+            }
+        }
+
+        return $price;
     }
 
     public function getPaidAmount($refund = false)
@@ -1850,6 +2021,24 @@ $misc = Misc::where('booking_id', $this->id)->first();
 
         if ($paid > $payable) {
             return ($paid - $payable) - $refund;
+        }
+
+        return 0;
+    }
+
+    public function getRefundAmountWithoutBill()
+    {
+        $payable = $this->getPayableAmountWithoutBill();
+        $paid = $this->getPaidAmountWithoutBill();
+        $refund = $this->getPaidAmountWithoutBill(true);
+        $payable = $payable + $refund;
+
+        $bill = $this->lastBill();
+        if($bill){
+            $payable = $payable + $bill->remaining_amount;
+        }
+        if ($paid > $payable) {
+            return ($paid - $payable);
         }
 
         return 0;
@@ -2325,6 +2514,18 @@ $misc = Misc::where('booking_id', $this->id)->first();
         return $price;
     }
 
+    public function getConsultationAmountWithoutBill()
+    {
+        $tokens = OpdTokens::with('bill')->doesntHave('bill')->where('booking_id', $this->id)
+         ->where('created_at', '<=', date('Y-m-d H:i:s'))->get();
+        $price = 0;
+        foreach ($tokens as $token) {
+            $price += $token->charges;
+        }
+
+        return $price;
+    }
+
     public function getIdNumber()
     {
         $booking = Booking::orderBy('booking_id', 'DESC')->where('id', '!=', $this->id)->whereNotNull('booking_id')->first();
@@ -2374,6 +2575,44 @@ $final_kid = 1;
 }		
             return (int) $final_kid;
         }
+    }
+
+    function generateBill(){
+        $bill = new Bill();
+        $bill->booking_id = $this->id;
+        $bill->created_by = \Auth::user()->id;
+        $bill->bill_no = Bill::getID();
+        $bill->bill_date = date("d-m-Y");      
+        $bill->consultation = $this->getConsultationAmountWithoutBill();
+        $bill->room_rent =  $this->getAccomodationAmount(true, true);
+        $bill->diet = $this->getDietAmountWithoutBill();
+        $bill->treatments = $this->getTreatmentsAmountWithoutBill();
+        $bill->lab = $this->getLabAmountWithoutBill();
+
+        foreach(Department::all() as $department) {
+            if ($department->title == 'Physiotherapy') {
+                $bill->physiotherapy = $this->getTreatmentsAmountWithoutBill($department->id);
+            }
+            if ($department->title == 'Naturopathy and Yoga') {
+                $bill->naturopathy_and_yoga = $this->getTreatmentsAmountWithoutBill($department->id);
+            }
+            if ($department->title = 'Ayurveda') {
+                $bill->ayurveda = $this->getTreatmentsAmountWithoutBill($department->id);
+            }
+        }
+        $bill->discount = $this->getDiscountsAmountWithoutBill(true);
+        $bill->misc = $this->getMiscAmountWithoutBill();
+       
+        $bill->bill_amount = $this->getPaidAmountWithoutBill();
+        $bill->remaining_amount = $this->getPendingAmountWithoutBill();
+        $bill->advance_amount = $this->getPaidAmountWithoutBill(true);
+        $bill->refundable_amount = $this->getRefundAmountWithoutBill();
+        if($bill->save()) {
+            if ($bill->id != null) {
+                $bill->updateBillIds();
+            }
+        }
+        return $bill;
     }
 
 }

@@ -22,10 +22,17 @@ class DietChart extends Model
         'status',
         'end_date',
         'created_by',
-        'booking_id'
+        'booking_id',
+        'bill_id'
     ];
 
     protected $table = 'diet_chart';
+    
+    public function bill()
+    {
+        return $this->belongsTo('App\Bill', 'bill_id');
+    }
+
 
     public static function getRules()
     {

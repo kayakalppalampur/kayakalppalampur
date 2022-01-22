@@ -106,14 +106,16 @@
                                 <div class="profile-details" style="width:100%">
                                     <div class="patient-card-detail">
                                         <label style="width:100%">Lab Test Details:</label>
-                                        <table class="table ui">
-                                            <tr>
+                                        <table class="ui table table_cus_v last_row_bdr">
+                                        <thead>   
+                                        <tr>
                                                 <th>Sr. No</th>
                                                 <th>Date</th>
                                                 <th>Tests</th>
                                                 <th>Note</th>
                                                 <th>Price</th>
-                                            </tr>
+                                            </tr> </thead>
+                                            <tbody>   
                                             @php $i = 1; @endphp
                                             @foreach($all_lab_tests as $lab_test)
                                                 <tr>
@@ -125,6 +127,7 @@
                                                 </tr>
                                             @php $i++; @endphp
                                             @endforeach
+                                            <tbody>   
                                         </table>
                                         
                                     </div>
@@ -132,7 +135,7 @@
                                     <div class="profile-details" style="width:100%;padding-top:40px;">
                                         <div class="patient-card-detail"><label
                                                     style="width:50%;">
-                                                <span style="padding: 15px;border: 1px solid;width: 50%;"><b>Rs.{{ $booking->getLabAmount() }}/-</b></span></label>
+                                                <span style="padding: 15px;border: 1px solid;width: 50%;"><b>Rs.{{ $booking->getLabAmountWithoutBill() }}/-</b></span></label>
                                          
                                         </div>
                                     </div>

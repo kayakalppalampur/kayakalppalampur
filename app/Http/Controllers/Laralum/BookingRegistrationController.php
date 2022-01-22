@@ -128,7 +128,7 @@ class BookingRegistrationController extends Controller
                     try {
                         $user->SendActivationEmail(); // send activation mail to user
                     } catch (\Exception $e) {
-                        Log::error("Failed to send account activation mail, possible causes: " . $e->getMessage());
+                        \Log::error("Failed to send account activation mail, possible causes: " . $e->getMessage());
                     }
                     $user->save();
 		      \DB::commit();
@@ -144,7 +144,7 @@ class BookingRegistrationController extends Controller
             return redirect()->back()->with(['status' => 'danger', 'message' => 'Something went wrong .']);
 
         } catch (\Exception $e) {
-            Log::error("Failed to add the user data during booking process. Possible causes: " . $e->getMessage());
+            \Log::error("Failed to add the user data during booking process. Possible causes: " . $e->getMessage());
             return redirect()->back()->with(['status' => 'danger', 'message' => 'Failed to process your request. Please try again later.']);
         }
     }
@@ -511,7 +511,7 @@ class BookingRegistrationController extends Controller
                     $healthIssues->save();
 
                 } catch (\Exception $e) {
-                    Log::error("Failed to add the health issues during booking process. Possible causes: " . $e->getMessage());
+                    \Log::error("Failed to add the health issues during booking process. Possible causes: " . $e->getMessage());
                     return redirect()->back()->with(['status' => 'danger', 'message' => 'Something went wrong .']);
                 }
                 if ($booking->checkAccommodation()) {
