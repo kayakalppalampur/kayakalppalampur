@@ -17,7 +17,11 @@ class BillController extends Controller
      */
     public function index(Request $request)
     {
+<<<<<<< HEAD
         Laralum::permissionToAccess('admin.admin_settings.bills');
+=======
+        Laralum::permissionToAccess('admin.doctor_bills.list');
+>>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
         $bills = Bill::select('*');
 
         if (!\Auth::user()->isAdmin()) {
@@ -44,7 +48,11 @@ class BillController extends Controller
      */
     public function view($id)
     {
+<<<<<<< HEAD
         Laralum::permissionToAccess('admin.admin_settings.bills');
+=======
+        Laralum::permissionToAccess('admin.doctor_bills.list');
+>>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
         $bill = Bill::find($id);
 
         return view('laralum.bills.view', compact('bill'));
@@ -53,7 +61,11 @@ class BillController extends Controller
     public function edit($id)
     {
         # Check permissions
+<<<<<<< HEAD
         Laralum::permissionToAccess('admin.admin_settings.bills');
+=======
+        Laralum::permissionToAccess('admin.doctor_bills.list');
+>>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
 
         # Find the bill
         $row = Bill::findOrFail($id);
@@ -82,7 +94,11 @@ class BillController extends Controller
     public function update($id, Request $request)
     {
         # Check permissions
+<<<<<<< HEAD
         Laralum::permissionToAccess('admin.admin_settings.bills');
+=======
+        Laralum::permissionToAccess('admin.doctor_bills.list');
+>>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
 
         # Find the row
         $bill = Bill::findOrFail($id);
@@ -111,7 +127,11 @@ class BillController extends Controller
      */
     public function create()
     {
+<<<<<<< HEAD
         Laralum::permissionToAccess('admin.admin_settings.bills');
+=======
+        Laralum::permissionToAccess('admin.doctor_bills.list');
+>>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
         # Get all the data
         $data_index = 'bills';
         require('Data/Create/Get.php');
@@ -132,7 +152,11 @@ class BillController extends Controller
 
     public function store(Request $request)
     {
+<<<<<<< HEAD
         Laralum::permissionToAccess('admin.admin_settings.bills');
+=======
+        Laralum::permissionToAccess('admin.doctor_bills.list');
+>>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
         $rules = Bill::getRules(true);
 
         $validator = \Validator::make($request->all(), $rules);
@@ -165,7 +189,11 @@ class BillController extends Controller
 
     public function destroy($id)
     {   # Check permissions
+<<<<<<< HEAD
         Laralum::permissionToAccess('admin.admin_settings.bills');
+=======
+        Laralum::permissionToAccess('admin.doctor_bills.list');
+>>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
 
         # Select Bill
         $bill = Bill::findOrFail($id);
@@ -226,7 +254,11 @@ class BillController extends Controller
 
     public function ajaxUpdate(Request $request)
     {
+<<<<<<< HEAD
         Laralum::permissionToAccess('admin.admin_settings.bills');
+=======
+        Laralum::permissionToAccess('admin.doctor_bills.list');
+>>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
         $per_page = $request->get("per_page") ? $request->get("per_page") : 10;
         $pagination = true;
         if ($per_page == "All") {
@@ -235,6 +267,7 @@ class BillController extends Controller
         $matchThese = [];
         $search = false;
         $option_ar = [];
+<<<<<<< HEAD
         if (!empty($request->has('bill_date'))) {
             $option_ar[] = "Bill Date";
             $search = true;
@@ -255,6 +288,12 @@ class BillController extends Controller
             $search = true;
             $bill_to_date = date('Y-m-d H:i:s', strtotime($request->get('bill_to_date')));
             $s_data['bill_to_date'] = $request->get('bill_to_date');
+=======
+        if (!empty($request->has('title'))) {
+            $option_ar[] = "Title";
+            $search = true;
+            $matchThese['title'] = $request->get('title');
+>>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
         }
 
         $options = implode(", ", $option_ar);
@@ -269,6 +308,7 @@ or search by other options";
             $pagination = false;
         }
 
+<<<<<<< HEAD
         $models = Bill::select('patient_bills.*')->orderBy('patient_bills.created_at', 'DESC');
 
         if ($search == true) {
@@ -286,6 +326,19 @@ or search by other options";
             }            
 
             $bills = $models->orderBy('patient_bills.created_at', 'DESC')->get();
+=======
+        $models = Bill::select('bills.*')->orderBy('bills.created_at', 'DESC');
+
+        if ($search == true) {
+            $models = Bill::select('bills.*')->where(function ($query) use ($matchThese) {
+                foreach ($matchThese as $key => $match) {
+                    $query->where($key, 'like', "%$match%");
+                }
+            })
+                ->orderBy('bills.created_at', 'DESC');
+
+            $bills = $models->get();
+>>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
             $count = $models->count();
         } else {
             $count = $models->count();
@@ -297,15 +350,21 @@ or search by other options";
         }
         /*echo '<pre>'; print_r($matchThese['role_id']);exit;*/
         # Return the view
+<<<<<<< HEAD
 
 
         $search_data = array_merge($matchThese, $s_data);
         return [
             'html' => view('laralum/bills/_list', ['bills' => $bills, 'count' => $count, 'error' => $error, 'search' => $search, 'search_data' =>  $search_data ])->render()
+=======
+        return [
+            'html' => view('laralum/bills/_list', ['bills' => $bills, 'count' => $count, 'error' => $error, 'search' => $search, 'search_data' => $matchThese])->render()
+>>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
         ];
 
     }
 
+<<<<<<< HEAD
     public function print($id) 
     {
         Laralum::permissionToAccess('admin.admin_settings.bills');
@@ -323,6 +382,12 @@ or search by other options";
     {
 
         Laralum::permissionToAccess('admin.admin_settings.bills');
+=======
+    public function printBills(Request $request)
+    {
+
+        Laralum::permissionToAccess('admin.doctor_bills.list');
+>>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
         $per_page = $request->get("per_page") ? $request->get("per_page") : 10;
         $pagination = true;
         if ($per_page == "All") {
@@ -331,6 +396,7 @@ or search by other options";
         $matchThese = [];
         $search = false;
         $option_ar = [];
+<<<<<<< HEAD
         if (!empty($request->has('bill_date'))) {
             $option_ar[] = "Bill Date";
             $search = true;
@@ -351,6 +417,17 @@ or search by other options";
             $search = true;
             $bill_to_date = date('Y-m-d H:i:s', strtotime($request->get('bill_to_date')));
             $s_data['bill_to_date'] = $request->get('bill_to_date');
+=======
+
+        if ($request->s && $request->s != 'null') {
+            $search_data = json_decode($request->s, true);
+
+            if (!empty($search_data['title'])) {
+                $option_ar[] = "Title";
+                $search = true;
+                $matchThese['title'] = $search_data['title'];
+            }
+>>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
         }
 
         $options = implode(", ", $option_ar);
@@ -365,6 +442,7 @@ or search by other options";
             $pagination = false;
         }
 
+<<<<<<< HEAD
         $models = Bill::select('patient_bills.*')->orderBy('patient_bills.created_at', 'DESC');
 
         if ($search == true) {
@@ -382,6 +460,19 @@ or search by other options";
             }            
 
             $bills = $models->orderBy('patient_bills.created_at', 'DESC')->get();
+=======
+        $models = Bill::select('bills.*')->orderBy('bills.created_at', 'DESC');
+
+        if ($search == true) {
+            $models = Bill::select('bills.*')->where(function ($query) use ($matchThese) {
+                foreach ($matchThese as $key => $match) {
+                    $query->where($key, 'like', "%$match%");
+                }
+            })
+                ->orderBy('bills.created_at', 'DESC');
+
+            $bills = $models->get();
+>>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
             $count = $models->count();
         } else {
             $count = $models->count();
@@ -393,7 +484,11 @@ or search by other options";
         }
 
 
+<<<<<<< HEAD
         return view('laralum/bills/print', [
+=======
+        return view('laralum/bills/print_bills', [
+>>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
             'bills' => $bills,
             'print' => true
         ]);
@@ -401,7 +496,11 @@ or search by other options";
 
     public function exportBills(Request $request, $type)
     {
+<<<<<<< HEAD
         Laralum::permissionToAccess('admin.admin_settings.bills');
+=======
+        Laralum::permissionToAccess('admin.doctor_bills.list');
+>>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
         $per_page = $request->get("per_page") ? $request->get("per_page") : 10;
         $pagination = true;
         if ($per_page == "All") {

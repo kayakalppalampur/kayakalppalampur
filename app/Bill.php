@@ -4,7 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+<<<<<<< HEAD
 class Bill extends Model
+=======
+class Building extends Model
+>>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
 {
     protected $fillable = [
         'bill_no', 'bill_date', 'booking_id', 'amount_paid'
@@ -15,10 +19,17 @@ class Bill extends Model
     public static function getRoutesArray()
     {
         return [
+<<<<<<< HEAD
             'Laralum::admin.bills.create',
             'Laralum::admin.bills',
             'Laralum::admin.bills.edit',
             'Laralum::admin.bills.delete',
+=======
+            'Laralum::bills.create',
+            'Laralum::bills',
+            'Laralum::bills.edit',
+            'Laralum::bills.delete'
+>>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
         ];
     }
 
@@ -26,6 +37,7 @@ class Bill extends Model
     {
         $this->delete();
     }
+<<<<<<< HEAD
 
     public function booking(){
         return $this->belongsTo("App\Booking", "booking_id");
@@ -95,4 +107,6 @@ class Bill extends Model
 
 
 
+=======
+>>>>>>> 5ed0c76eb7c3f854e777a8aa4decfe2b2a810fb2
 }
