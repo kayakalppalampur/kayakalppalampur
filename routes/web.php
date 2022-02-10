@@ -1088,6 +1088,8 @@ Route::group(['middleware' => ['auth', 'laralum.base', 'laralum.auth'], 'prefix'
 
     Route::get('/booking/discharge-patient-billing/{transaction_id}', 'BookingController@dischargeBillings')->name('bookings.discharge-patient-billing-individual');
     Route::post('/booking/print-bill/{user_id}', 'BookingController@printBill')->name('bookings.print_bill');
+    Route::post('/booking/generate-bill/{id}', 'BookingController@generateBill')->name('bookings.generate_bill');
+    
     Route::get('/booking/get-accommodation-billing-details/{booking_id}/{discharge?}', 'BookingController@getAccommodationDetails')->name('bookings.accommodation-billing-details');
     Route::get('/booking/get-services-billing-details/{transaction_id}/{discharge?}', 'BookingController@getServicesDetails')->name('bookings.services-billing-details');
     Route::get('/booking/get-paid-billing-details/{transaction_id}', 'BookingController@getPaidDetails')->name('bookings.paid-billing-details');

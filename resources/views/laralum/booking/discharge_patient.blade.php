@@ -461,6 +461,11 @@ if ($daily_diet != null) {
 
                                             </div>
                                         </form>
+
+                                         <form class="token" method="POST" id="generate-bill"
+                                              action="{{ url('/admin/booking/generate-bill/'.$booking->id) }}">
+                                            {!! csrf_field() !!}
+                                            </form>
                                 </div>
 
                                 @elseif($search == true )
@@ -653,34 +658,33 @@ if ($daily_diet != null) {
             $(".modal").modal("hide");
         });
 
-        $(document).ready(function () {
-            var total_treatment_price = $('.total_treatment_price').html();
-             setInterval(checkstatus, 2000);
+        // $(document).ready(function () {
+        //     var total_treatment_price = $('.total_treatment_price').html();
+        //      setInterval(checkstatus, 2000);
         
-            function checkstatus(){
-                var booking_id = {{ $booking->id }};
-                $.ajax({
-                    url:"{{ url('/admin/user/check_treatment_status') }}"+"/"+booking_id,
-                    type: 'GET', 
-                    success: function (data) {
-                        if(data != total_treatment_price){
-                            location.reload(true);
-                        }
-                        else{
-                            console.log('same');
-                        }
-                    },
-                });
-            };
+        //     function checkstatus(){
+        //         var booking_id = {{ $booking->id }};
+        //         $.ajax({
+        //             url:"{{ url('/admin/user/check_treatment_status') }}"+"/"+booking_id,
+        //             type: 'GET', 
+        //             success: function (data) {
+        //                 if(data != total_treatment_price){
+        //                     location.reload(true);
+        //                 }
+        //                 else{
+        //                     console.log('same');
+        //                 }
+        //             },
+        //         });
+        //     };
 
-        });
+        // });
 
 
         $("#print").click(function(e) {
             e.preventDefault();
             if (confirm("This action will generate a new bill, Do you want to continue?")){
-                $("#generate_bill").val("1");
-                $("#print-form").submit();
+                $("#generate-bill").submit();
             }
         })
 

@@ -4005,6 +4005,26 @@ or search by other options";
         return view('laralum.booking.followups', compact('followups', 'search', 'error', 'count'));
     }
 
+    public function generateBill(Request $request, $id = null) {
+        $booking = Booking::find($id);
+        $data = [];
+        $data['back'] = 'discharge';
+        $data['booking'] = $booking;
+        try {
+            \DB::beginTransaction();
+            $bill = $booking->generateBill();   
+
+		    \DB::commit();
+            $data['bill'] = $bill;
+            return view('laralum.booking.print-generated-bill', $data);
+
+        } catch (\Exception $e) {
+            Log::error("Failed to send account activation mail, possible causes: " . $e->getMessage());
+        }
+
+        return redirect()->back()->with('error', 'Something went wrong!!!');       
+    }
+
     public function printBill(Request $request, $id = null)
     {
         //return $id;

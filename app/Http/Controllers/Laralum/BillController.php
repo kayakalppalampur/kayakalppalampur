@@ -175,11 +175,11 @@ class BillController extends Controller
         # Delete Bill
         if ($bill->customDelete()) {
             # Redirect the admin
-            return redirect()->route('Laralum::bills')->with('success', trans('laralum.msg_bill_deleted'));
+            return redirect()->route('Laralum::bills')->with('success','Bill deleted successfully');
         }
         //}
 
-        return redirect()->route('Laralum::bills')->with('error', trans('laralum.msg_bill_delete_not_allowed'));
+        return redirect()->route('Laralum::bills')->with('error','Something went wrong');
 
     }
 

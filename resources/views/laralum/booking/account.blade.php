@@ -730,7 +730,7 @@ $("#save-misc").click(function (e) {
         });
 
 
-        $(document).ready(function () {
+      /*  $(document).ready(function () {
             var total_treatment_price = $('.total_treatment_price').html();
             setInterval(checkstatus, 2000);
         
