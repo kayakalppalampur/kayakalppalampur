@@ -4013,6 +4013,14 @@ or search by other options";
         $data['booking'] = $booking;
         try {
             \DB::beginTransaction();
+
+            if ($booking->patient_type == Booking::PATIENT_TYPE_IPD) {
+                $pending_amount = $booking->getPendingAmountWithoutBill();
+                if ($pending_amount > 0) {
+                    return redirect()->back()->with('error', 'You are going to generate bill for IPD patient please clear all dues before proceeding.');   
+                }
+            }
+
             $bill = $booking->generateBill();   
 
 		    \DB::commit();
