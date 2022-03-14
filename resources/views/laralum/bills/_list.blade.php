@@ -215,10 +215,7 @@
                     </td>
                     <td>
                         &nbsp;
-                    </td>
-                    <td>
-                        &nbsp;
-                    </td>
+                    </td>                   
                     <td>
                     &nbsp;
                     </td>
@@ -288,16 +285,16 @@
             <td>
                         &nbsp;
                     </td>
+                    <td>
+                        &nbsp;
+                    </td>
             <td class="icons">
                     <input type="text" class="table_search" id="table_search_bill_date"
                            value="{{ @$search_data['bill_date'] }}"
                            name="bill_date"
                            placeholder="Search Bill Date"/> <i
                             class="fa fa-filter"></i>
-                </td>
-                    <td>
-                        &nbsp;
-                    </td>
+                </td>                    
                     <td>
                         &nbsp;
                     </td>
