@@ -107,63 +107,63 @@
 
                             <div class="col-md-12">
 
-        <div class="col-md-6">
+        <div class="col-sm-6 col-md-6 col-xs-6">
         @if($bill->opd_token_id)   
         <div class="row" style="padding:10px;">
-            <div class="col-md-6">OPD Consultation</div>
-            <div class="col-md-6" style="border-bottom:1px solid;height: 20px;">{{  $bill->opd_consultation }}</div>
+            <div class="col-sm-6 col-md-6 col-xs-6">OPD Consultation</div>
+            <div class="col-sm-6 col-md-6 col-xs-6" style="border-bottom:1px solid;height: 20px;">{{  $bill->opd_consultation }}</div>
     </div>
         @endif
         <div class="row" style="padding:10px;">
-            <div class="col-md-6">Physiotherapy</div>
-            <div class="col-md-6" style="border-bottom:1px solid;height: 20px;">{{  $bill->physiotherapy }}</div>
+            <div class="col-sm-6 col-md-6 col-xs-6">Physiotherapy</div>
+            <div class="col-sm-6 col-md-6 col-xs-6" style="border-bottom:1px solid;height: 20px;">{{  $bill->physiotherapy }}</div>
         </div>
 
         <div class="row" style="padding:10px;">
-            <div class="col-md-6">Naturopathy and Yoga</div>
-            <div class="col-md-6" style="border-bottom:1px solid;height: 20px;">{{  $bill->naturopathy_and_yoga }}</div>
+            <div class="col-sm-6 col-md-6 col-xs-6">Naturopathy and Yoga</div>
+            <div class="col-sm-6 col-md-6 col-xs-6" style="border-bottom:1px solid;height: 20px;">{{  $bill->naturopathy_and_yoga }}</div>
         </div>
 
         <div class="row" style="padding:10px;">
-            <div class="col-md-6">Ayurveda</div>
-            <div class="col-md-6" style="border-bottom:1px solid;height: 20px;">{{  $bill->ayurveda }}</div>
+            <div class="col-sm-6 col-md-6 col-xs-6">Ayurveda</div>
+            <div class="col-sm-6 col-md-6 col-xs-6" style="border-bottom:1px solid;height: 20px;">{{  $bill->ayurveda }}</div>
         </div>
 
         <div class="row" style="padding:10px;">
-            <div class="col-md-6">Lab Charges</div>
-            <div class="col-md-6" style="border-bottom:1px solid;height: 20px;">{{  $bill->lab }}</div>
+            <div class="col-sm-6 col-md-6 col-xs-6">Lab Charges</div>
+            <div class="col-sm-6 col-md-6 col-xs-6" style="border-bottom:1px solid;height: 20px;">{{  $bill->lab }}</div>
         </div>
         <div class="row" style="padding:10px;">
-        <div class="col-md-6">Room Rent</div>
-            <div class="col-md-6" style="border-bottom:1px solid;height: 20px;">{{  $bill->room_rent }}</div>
+        <div class="col-sm-6 col-md-6 col-xs-6">Room Rent</div>
+            <div class="col-sm-6 col-md-6 col-xs-6" style="border-bottom:1px solid;height: 20px;">{{  $bill->room_rent }}</div>
       
     </div>
 
         </div>
-        <div class="col-md-6">
+        <div class="col-sm-6 col-md-6 col-xs-6">
             
         <div class="row" style="padding:10px;">
-            <div class="col-md-6">Discount</div>
-            <div class="col-md-6" style="border-bottom:1px solid;height: 20px;">{{  $bill->discount }}</div>
+            <div class="col-sm-6 col-md-6 col-xs-6">Discount</div>
+            <div class="col-sm-6 col-md-6 col-xs-6" style="border-bottom:1px solid;height: 20px;">{{  $bill->discount }}</div>
         </div>
 
         <div class="row" style="padding:10px;">
-            <div class="col-md-6">Tax</div>
-            <div class="col-md-6" style="border-bottom:1px solid;height: 20px;">&nbsp;</div>
+            <div class="col-sm-6 col-md-6 col-xs-6">Tax</div>
+            <div class="col-sm-6 col-md-6 col-xs-6" style="border-bottom:1px solid;height: 20px;">&nbsp;</div>
         </div>
 
         <div class="row" style="padding:10px;">
-            <div class="col-md-6">Tax Amount</div>
-            <div class="col-md-6" style="border-bottom:1px solid;height: 20px;">&nbsp;</div>
+            <div class="col-sm-6 col-md-6 col-xs-6">Tax Amount</div>
+            <div class="col-sm-6 col-md-6 col-xs-6" style="border-bottom:1px solid;height: 20px;">&nbsp;</div>
         </div>
 
         <div class="row" style="padding:10px;">
-            <div class="col-md-6">Package</div>
-            <div class="col-md-6" style="border-bottom:1px solid;height: 20px;">&nbsp;</div>
+            <div class="col-sm-6 col-md-6 col-xs-6">Package</div>
+            <div class="col-sm-6 col-md-6 col-xs-6" style="border-bottom:1px solid;height: 20px;">&nbsp;</div>
         </div>
         <div class="row" style="padding:10px;">
-        <div class="col-md-6">Admission / Consultation Charges</div>
-            <div class="col-md-6" style="border-bottom:1px solid;height: 20px;">{{ $bill->consultation + $bill->misc }}</div>
+        <div class="col-sm-6 col-md-6 col-xs-6">Admission / Consultation Charges</div>
+            <div class="col-sm-6 col-md-6 col-xs-6" style="border-bottom:1px solid;height: 20px;">{{ $bill->consultation + $bill->misc }}</div>
       
     </div>      
     </div>
