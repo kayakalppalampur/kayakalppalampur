@@ -82,7 +82,7 @@
             @if(!isset($print))
                     <th>Actions</th>
                 @endif
-                <th>Booking ID</th>
+                <th>UHID</th>
                 <th>Bill Date</th>
                 <th>Bill No.</th>
                 <th>Name</th>
@@ -182,7 +182,7 @@
                     @endif
                     <td>
                     @if($bill->booking)
-                             {{ $bill->booking->booking_id }}
+                             {{ $bill->booking->getProfile('uhid') }}
                                     @endif
 </td>
                     <td style="white-space:nowrap;">{{ $bill->bill_date }}</td>
@@ -265,7 +265,7 @@
                data-action="{{ url('admin/bills') }}?page={{ @$_REQUEST['page'] }}&per_page={{ @$_REQUEST['per_page'] }}">
             <thead>
             <tr>
-            <th>Booking ID</th>
+            <th>UHID</th>
             <th>Bill Date</th>
                 <th>Bill No.</th>
                 <th>Name</th>
