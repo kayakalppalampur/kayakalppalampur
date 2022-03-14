@@ -82,6 +82,7 @@
             @if(!isset($print))
                     <th>Actions</th>
                 @endif
+                <th>Booking ID</th>
                 <th>Bill Date</th>
                 <th>Bill No.</th>
                 <th>Name</th>
@@ -101,6 +102,9 @@
             @if(!isset($print))
                 <tr class="table_search">
                 <td>
+                        &nbsp;
+                    </td>
+                    <td>
                         &nbsp;
                     </td>
                 <td class="icons">
@@ -160,6 +164,7 @@
                 @if(!isset($print))
                         <td>
                               <div>
+ 
                                     @if(Laralum::loggedInUser()->hasPermission('admin.admin_settings.bills'))
                                          <a href="{{ route('Laralum::bills.bill_print', ['id' => $bill->id]) }}"
                                            class="item no-disable">
@@ -175,6 +180,11 @@
                                 </div>
                         </td>
                     @endif
+                    <td>
+                    @if($bill->booking)
+                             {{ $bill->booking->booking_id }}
+                                    @endif
+</td>
                     <td style="white-space:nowrap;">{{ $bill->bill_date }}</td>
                     <td>{{ $bill->bill_no }}</td>
                     @if($bill->opdToken)
@@ -203,7 +213,9 @@
                     <td>
                         &nbsp;
                     </td>
-                    
+                    <td>
+                        &nbsp;
+                    </td>
                     <td>
                         &nbsp;
                     </td>
@@ -253,6 +265,7 @@
                data-action="{{ url('admin/bills') }}?page={{ @$_REQUEST['page'] }}&per_page={{ @$_REQUEST['per_page'] }}">
             <thead>
             <tr>
+            <th>Booking ID</th>
             <th>Bill Date</th>
                 <th>Bill No.</th>
                 <th>Name</th>
@@ -272,6 +285,9 @@
             </thead>
             <tbody>
             @if(!isset($print))
+            <td>
+                        &nbsp;
+                    </td>
             <td class="icons">
                     <input type="text" class="table_search" id="table_search_bill_date"
                            value="{{ @$search_data['bill_date'] }}"
