@@ -323,35 +323,42 @@ or search by other options";
     {
 
         Laralum::permissionToAccess('admin.admin_settings.bills');
+        $search_data  = [];
+
+       
         $per_page = $request->get("per_page") ? $request->get("per_page") : 10;
         $pagination = true;
+        $matchThese = [];
+        $option_ar = [];
+        $search = false;
         if ($per_page == "All") {
             $pagination = false;
         }
-        $matchThese = [];
-        $search = false;
-        $option_ar = [];
-        if (!empty($request->has('bill_date'))) {
+        if ($request->s && $request->s != 'null') {
+            $search_data = json_decode($request->s, true);
+     
+        if (!empty( $search_data['bill_date'])) {
             $option_ar[] = "Bill Date";
             $search = true;
-            $matchThese['bill_date'] = $request->get('bill_date');
+            $matchThese['bill_date'] = $search_data['bill_date'];
         }
         $bill_from_date = null;
         $bill_to_date = null;
         $s_data = [];
-         if (!empty($request->has('bill_from_date')) ){
+         if (!empty($search_data['bill_from_date']) ){
             $option_ar[] = "Bill From Date";
             $search = true;
-            $bill_from_date = date('Y-m-d H:i:s', strtotime($request->get('bill_from_date')));
-            $s_data['bill_from_date'] = $request->get('bill_from_date');
+            $bill_from_date = date('Y-m-d H:i:s', strtotime($search_data['bill_from_date']));
+            $s_data['bill_from_date'] =$search_data['bill_from_date'];
         } 
 
-        if (!empty($request->has('bill_to_date') )) {
+        if (!empty($search_data['bill_to_date'] )) {
             $option_ar[] = "Bill To Date";
             $search = true;
-            $bill_to_date = date('Y-m-d H:i:s', strtotime($request->get('bill_to_date')));
-            $s_data['bill_to_date'] = $request->get('bill_to_date');
+            $bill_to_date = date('Y-m-d H:i:s', strtotime($search_data['bill_to_date']));
+            $s_data['bill_to_date'] = $search_data['bill_to_date'];
         }
+    }
 
         $options = implode(", ", $option_ar);
 

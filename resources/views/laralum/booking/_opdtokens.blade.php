@@ -127,6 +127,16 @@
                                         Print Token
                                     </a>
                                 @endif
+
+                                @if(Laralum::loggedInUser()->hasPermission('admin.bookings.opd.tokens.list'))
+                                    <div class="header">{{ trans('laralum.editing_options') }}</div>
+                                    <a href="{{ route('Laralum::opd.tokens.print.token-bill', ['id' => $row->id]) }}"
+                                       class="item no-disable">
+                                        <i class="print icon"></i>
+                                        Print Bill
+                                    </a>
+                                @endif
+
                                 @if($row->booking == null)
                                     <a href="{{ route('Laralum::opd.tokens.convert', ['id' => $row->id]) }}"
                                        class="item no-disable">

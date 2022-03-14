@@ -1067,6 +1067,7 @@ Route::group(['middleware' => ['auth', 'laralum.base', 'laralum.auth'], 'prefix'
     Route::post('/booking/print-opd-token/{booking_id}', 'BookingController@printOpdToken')->name('bookings.print_opd_token.individual');
     Route::get('/booking/print-opd-token', 'BookingController@printOpdToken')->name('bookings.print_token');
     Route::get('/opd-token-list/{id}/print', 'BookingController@printOpdPatientToken')->name('opd.tokens.print.token');
+    Route::get('/opd-token-list/{id}/print-bill', 'BookingController@printOpdPatientTokenBill')->name('opd.tokens.print.token-bill');
 
 
     Route::get('/booking/account/{booking_id}', 'BookingController@account')->name('bookings.account');

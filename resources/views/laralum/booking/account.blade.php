@@ -56,8 +56,8 @@
                             @if($booking->isEditable()) Edit Booking @else Revisit @endif --}}</a>
                     @endif
 
-                    <a class="btn btn-primary ui button blue no-disable"
-                       href="{{ url('admin/booking/account-print/'.$booking->id) }}">Print</a>
+                    <!--a class="btn btn-primary ui button blue no-disable"
+                       href="{{ url('admin/booking/account-print/'.$booking->id) }}">Print</a-->
 
                 </div>
 
@@ -329,10 +329,11 @@
                                                             <div class="col-2"><label> Admission / Consultation Charges </label></div>
                                                             <div class="col-10 token-amount">
                                                             <div class="total_misc_price" >
+                                                            {{  $booking->getMiscAmount() }}
 
 
 
-<input style="width: 150px !important;
+<!--input style="width: 150px !important;
 margin-right: 20px;
 height: 30px !important;" type='text' id='misc-price' value='{{  $booking->getMiscAmount() }}' class='form-control' /></div> 
                                                                 
@@ -340,7 +341,7 @@ height: 30px !important;" type='text' id='misc-price' value='{{  $booking->getMi
                                                                                                                   
                                                                         <div class="right-acc">
                                                                             <button style='padding-bottom: 11px !important;
-padding-top: 11px !important;' id="save-misc">save Misc</button>
+padding-top: 11px !important;' id="save-misc">save Misc</button-->
                                                                         </div>
 
 

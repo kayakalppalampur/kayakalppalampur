@@ -7,6 +7,7 @@ use App\AyurvedAturExamination;
 use App\AyurvedDhatuExamination;
 use App\AyurvedDoshExamination;
 use App\Booking;
+use App\Bill;
 use App\BookingDiscount;
 use App\BookingRoom;
 use App\CardiovascularExamination;
@@ -7476,6 +7477,32 @@ or search by other options";
         $booking = $token->booking;
         $back_url = url('admin/opd-token-list');
         return view('laralum.booking.print-opd-token', compact('token', 'back_url', 'booking'));
+    }
+
+     /**
+     * print individual opd token bill
+     * @param null $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function printOpdPatientTokenBill(Request $request, $id = null)
+    {
+        Laralum::permissionToAccess('admin.bookings.tokens.list');
+        $tokenBill = Bill::where('opd_token_id', $id)->first();
+        $token = OpdTokens::find($id);
+        $booking = $token->booking;
+        $data['booking'] = $booking;
+        $back_url = 'opd-token-list';
+        if ($request->get('back_url')){
+            $back_url = url($request->get('back_url'));
+        }
+        $data['back'] = $back_url;
+
+        if ($tokenBill === null) {
+            $tokenBill = Bill::generateOpdTokenBill($token);           
+        }
+        $data['bill'] = $tokenBill;
+
+        return view('laralum.booking.print-generated-bill', $data);
     }
 
     /**

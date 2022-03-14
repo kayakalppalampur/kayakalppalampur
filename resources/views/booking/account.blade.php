@@ -22,11 +22,11 @@
             <div class="page_title">
                 <h2 class="pull-left">Basic Details</h2>
 
-                <div class="pull-right">
+                <!--div class="pull-right">
                     <a class="btn btn-primary ui button blue no-disable"
                        href="{{ url('bookings/'.$booking->id.'/print-account') }}">Print</a>
 
-                </div>
+                </div-->
 
 
             </div>

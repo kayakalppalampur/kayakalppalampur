@@ -101,6 +101,17 @@
     </div>
 @endif
 
+@if(Laralum::loggedInUser()->hasPermission('admin.bills'))
+<div class="item item_icon {{ \App\Settings::getActiveClass('admin.bills') }}">
+        <div class="header"><i class="fa fa-exclamation-circle"></i> Bills</div>
+        <div class="menu">
+        <a href="{{ route('Laralum::bills') }}"
+                   class="item {{ \App\Settings::getActiveClass('admin.bills', true) }}">Bills
+                </a>
+        </div>
+    </div>
+               
+            @endif
 
 @if(Laralum::loggedInUser()->hasPermission('admin.bookings_management'))
     <div class="item {{ \App\Settings::getActiveClass('admin.bookings_management') }}">
@@ -382,11 +393,7 @@
             <a href="{{ route('Laralum::price-settings') }}" class="item {{ \App\Settings::getActiveClass('admin.admin_settings.price_settings', true) }}">Price Setting</a>
                 @endif
 
-                @if(Laralum::loggedInUser()->hasPermission('admin.admin_settings.bills'))
-                <a href="{{ route('Laralum::bills') }}"
-                   class="item {{ \App\Settings::getActiveClass('admin.admin_settings.bills', true) }}">Bills
-                </a>
-            @endif
+               
 
 
 

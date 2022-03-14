@@ -81,6 +81,11 @@ ALTER TABLE `patient_lab_tests` ADD `bill_id` INT(11) NULL DEFAULT NULL AFTER `r
 ALTER TABLE `booking_discounts` ADD `bill_id` INT(11) NULL DEFAULT NULL AFTER `description`;
 ALTER TABLE `wallet` ADD `bill_id` INT(11) NULL DEFAULT NULL AFTER `description`;
 ALTER TABLE `miscs` ADD `bill_id` INT(11) NULL DEFAULT NULL AFTER `price`;
+ALTER TABLE `patient_bills` ADD `opd_token_id` INT(11) NULL DEFAULT NULL AFTER `booking_id`;
+
+ALTER TABLE `patient_bills` ADD `opd_consultation` INT(11) NULL DEFAULT NULL AFTER `booking_id`;
+ALTER TABLE `opd_tokens` ADD `bill_id` INT(11) NULL DEFAULT NULL AFTER `booking_id`;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

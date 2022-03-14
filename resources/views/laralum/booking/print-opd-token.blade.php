@@ -21,6 +21,11 @@
                         <a href="{{ $back_url != "" ? $back_url : url('admin/booking/generate-opd-token') }}" id="back"
                            class="btn btn-primary pull-left" style="background-color:#2185d0;border:none;padding:0.785714em 1.5em;border-radius:0.285714rem;line-height:1em;
     text-transform:uppercase;"> Back</a>
+                                    <a href="{{ route('Laralum::opd.tokens.print.token-bill', ['id' => $token->id]) }}"
+                                    class="btn btn-primary" style="background-color:#2185d0;border:none;padding:0.785714em 1.5em;border-radius:0.285714rem;line-height:1em;
+    text-transform:uppercase;">
+                                        Generate/Print Bill
+                                    </a>
                         <button class="ui button no-disable blue" id="print">PRINT TOKEN RECEIPT</button>
                     </div>
                     <div class="about_sec white_bg signup_bg" style="width:800px;margin:0 auto;">

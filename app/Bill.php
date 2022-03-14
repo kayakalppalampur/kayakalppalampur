@@ -15,10 +15,11 @@ class Bill extends Model
     public static function getRoutesArray()
     {
         return [
-            'Laralum::admin.bills.create',
-            'Laralum::admin.bills',
-            'Laralum::admin.bills.edit',
-            'Laralum::admin.bills.delete',
+            'Laralum::bills',
+            'Laralum::bills.view',
+            'Laralum::bills.delete',
+            'Laralum::bills.print',
+            'Laralum::bills.bill_print',
         ];
     }
 
@@ -32,6 +33,10 @@ class Bill extends Model
         return $this->belongsTo("App\Booking", "booking_id");
     }
     
+    public function opdToken() {
+        return $this->belongsTo("App\OpdTokens", "opd_token_id");
+    }
+
     public function updateBillIds()
     {
         $tokens = OpdTokens::where('booking_id', $this->booking_id)->doesntHave('bill')->where('created_at', '<=', date('Y-m-d H:i:s'))->get();
@@ -93,7 +98,23 @@ class Bill extends Model
         }
     
     
+        public static function generateOpdTokenBill($token){
+            $bill = new Bill();
+            $bill->opd_token_id = $token->id;
+            $bill->created_by = \Auth::user()->id;
+            $bill->bill_no = Bill::getID();
+            $bill->bill_date = date("d-m-Y");   
+            $bill->opd_consultation = $token->charges;
 
+            $bill->booking_id = $token->booking_id;
+            $bill->bill_amount = $token->charges;
+            if($bill->save()) {
+                if ($bill->id != null) {
+                    $token->bill_id = $bill->id;
+                }
+            }
+            return $bill;
+        }
 
 
 

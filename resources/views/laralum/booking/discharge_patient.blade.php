@@ -338,6 +338,29 @@ if ($daily_diet != null) {
                                                 </div>
                                             </div>
 
+
+                                            <div class="form-group">
+                                                            <div class="col-2"><label> Admission / Consultation Charges </label></div>
+                                                            <div class="col-10 token-amount">
+                                                            <div class="total_misc_price" >
+
+
+
+<input style="width: 150px !important;
+margin-right: 20px;
+height: 30px !important;" type='text' id='misc-price' value='{{  $booking->getMiscAmountWithoutBill() }}' class='form-control' /></div> 
+                                                                
+
+                                                                                                                  
+                                                                        <div class="right-acc">
+                                                                            <button style='padding-bottom: 11px !important;
+padding-top: 11px !important;' id="save-misc">save Misc</button>
+                                                                        </div>
+
+
+                                                                    
+                                                            </div>
+                                                        </div>
                                             <div class="form-group">
                                                 <div class="col-2"><label> Total Amount </label></div>
                                                 <div class="col-10">
@@ -687,6 +710,25 @@ if ($daily_diet != null) {
                 $("#generate-bill").submit();
             }
         })
+
+        $("#save-misc").click(function (e) {
+            e.preventDefault();
+		var price = $('#misc-price').val();
+                $.ajax({
+                    url: '{{ url("/admin/booking/save-misc") }}',
+                    type: "POST",
+                    data: {"_token": "{{csrf_token()}}", 'booking_id': "{{ $booking->id }}", 'price':price},
+                    success: function (data) {
+                        if (data.success == true) {
+                           alert("Successfully Saved");
+ location.reload();
+                        } else {
+                            alert("Something went wrong!!! Try again later");
+                        }
+                    }
+                });
+            
+        });
 
         /*$("#print").click(function (e) {
          /!*e.preventDefault();*!/

@@ -195,6 +195,12 @@ class Settings extends Model
 
     public static function getActiveClass($permission, $sub = false)
     {
+       
+        if ($permission == 'admin.bills') {
+            $routes_ar = Bill::getRoutesArray();
+
+            return self::getClass($routes_ar, $sub);
+        }
 
         if ($permission == 'account.treatment_tokens') {
             $routes_ar = Treatment::getAccountRoutesArray();
@@ -681,6 +687,7 @@ class Settings extends Model
             $routes_ar = AdminSetting::getRoutesArray();
             return self::getClass($routes_ar, $sub);
         }
+    
 
     }
 

@@ -28,8 +28,10 @@
             <p>
                 @if(!isset($print)) 
                     <a id="print" class="btn btn-primary ui button blue">Print</a> 
+
+                   
                     <a id="back" class="btn btn-primary ui button blue" @if($back == 'bills') 
-                    href="{{ url('/admin/bills') }}"  @else href="{{ url('/admin/booking/discharge-patient-billing/'.$booking->id) }}" @endif>Back</a>  
+                    href="{{ url('/admin/bills') }}" @elseif($back == 'opd-token-list') href="{{ url('admin/opd-token-list')}}"  @else href="{{ url('/admin/booking/discharge-patient-billing/'.$booking->id) }}" @endif>Back</a>  
                 @endif
             </p>
         </div>
@@ -79,9 +81,15 @@
                                 <div class="age-patient-outer-row" style="margin: 0px -15px;">
                                     <div class="patient-card-detail"
                                          style="float:left;width:100%;padding:0px 15px;margin-bottom:10px;">
-                                        <label style="width:30%;">Received from Mr./Mrs./Ms.:</label> <span class="user-nm"
+                                       
+                                       @if($bill->opdToken)
+                                       <label style="width:30%;">Received from Mr./Mrs./Ms.:</label> <span class="user-nm"
+                                                                                      style="width:70%;">{{ $bill->opdToken->first_name.' '.$bill->opdToken->last_name  }}</span>
+                                       @else
+                                         <label style="width:30%;">Received from Mr./Mrs./Ms.:</label> <span class="user-nm"
                                                                                       style="width:70%;">{{ $bill->booking->getProfile('first_name').' '.$bill->booking->getProfile('last_name')  }}</span>
-                                    </div>
+                                    @endif
+                                                                                    </div>
                                 </div>
                             </div>
                             <div class="profile-details" style="width:100%">
@@ -90,51 +98,83 @@
                                                                                         style="width:85%">{{ App\Settings::amountInWords($bill->bill_amount)  }}</span>
                                 </div>
                             </div>
+
+                            <div>
                             <div class="add_ph_outer">
                                 <div class="profile-details" style="width:100%">
                                     <div class="patient-card-detail"><label
                                                 style="width:100%">On Account of:</label>
 
-                                        <span
-                                                class="user-nm"
-                                                style="width:45%;padding: 20px;margin-left: 20px;border-bottom:unset;">
-                                             <span style="width:50%;border-bottom:unset;">Physiotherapy</span>
-                                             <span style="width:50%;margin-bottom: 10px;">{{  $bill->physiotherapy }}</span>
-                                                <br>
-                                                <span style="width:50%;border-bottom:unset;">Naturopathy and Yoga</span>
-                                             <span style="width:50%;margin-bottom: 10px;">{{  $bill->naturopathy_and_yoga }}</span>
-                                                <br>
-                                                <span style="width:50%;border-bottom:unset;">Ayurveda</span>
-                                             <span style="width:50%;margin-bottom: 10px;">{{  $bill->ayurveda }}</span>
-                                                <br>
-                                            <span style="width:50%;border-bottom:unset;">Lab Charges</span>
-                                                <span style="width:50%;margin-bottom: 10px;">{{ $bill->lab }}</span>
-                                                <br>
-                                             <span style="width:50%;border-bottom:unset;">Room Rent</span>
-                                                <span style="width:50%;margin-bottom: 10px;">{{ $bill->room_rent }}</span>
-                                                <br>
-                                        </span>
-                                        <span
-                                                class="user-nm"
-                                                style="width:45%;padding: 20px;margin-left: 20px;border-bottom:unset;">
-                                            <span style="width:50%;border-bottom:unset;">Discount</span>
-                                                <span style="width:50%;margin-bottom: 10px;">{{ $bill->discount }}</span>
-                                             <br>
+                            <div class="col-md-12">
 
-                                            <span style="width:50%;border-bottom:unset;">Tax</span>
-                                                <span style="width:50%;margin-bottom: 10px;">&nbsp;</span>
-                                                <br>
-                                             <span style="width:50%;border-bottom:unset;">Tax Amount</span>
-                                                <span style="width:50%;margin-bottom: 10px;">&nbsp;</span>
-                                                <br>
-                                              <span style="width:50%;border-bottom:unset;">Package</span>
-                                                <span style="width:50%;margin-bottom: 10px;">&nbsp;</span>
-                                                <br>
-                                              <span style="width:50%;border-bottom:unset;">Admission / Consultation Charges</span>
-                                                <span style="width:50%;margin-bottom: 10px;">{{ $bill->consultation + $bill->misc }}</span>
-                                                <br>
-                                        </span>
-                                    </div>
+        <div class="col-md-6">
+        @if($bill->opd_token_id)   
+        <div class="row" style="padding:10px;">
+            <div class="col-md-6">OPD Consultation</div>
+            <div class="col-md-6" style="border-bottom:1px solid;height: 20px;">{{  $bill->opd_consultation }}</div>
+    </div>
+        @endif
+        <div class="row" style="padding:10px;">
+            <div class="col-md-6">Physiotherapy</div>
+            <div class="col-md-6" style="border-bottom:1px solid;height: 20px;">{{  $bill->physiotherapy }}</div>
+        </div>
+
+        <div class="row" style="padding:10px;">
+            <div class="col-md-6">Naturopathy and Yoga</div>
+            <div class="col-md-6" style="border-bottom:1px solid;height: 20px;">{{  $bill->naturopathy_and_yoga }}</div>
+        </div>
+
+        <div class="row" style="padding:10px;">
+            <div class="col-md-6">Ayurveda</div>
+            <div class="col-md-6" style="border-bottom:1px solid;height: 20px;">{{  $bill->ayurveda }}</div>
+        </div>
+
+        <div class="row" style="padding:10px;">
+            <div class="col-md-6">Lab Charges</div>
+            <div class="col-md-6" style="border-bottom:1px solid;height: 20px;">{{  $bill->lab }}</div>
+        </div>
+        <div class="row" style="padding:10px;">
+        <div class="col-md-6">Room Rent</div>
+            <div class="col-md-6" style="border-bottom:1px solid;height: 20px;">{{  $bill->room_rent }}</div>
+      
+    </div>
+
+        </div>
+        <div class="col-md-6">
+            
+        <div class="row" style="padding:10px;">
+            <div class="col-md-6">Discount</div>
+            <div class="col-md-6" style="border-bottom:1px solid;height: 20px;">{{  $bill->discount }}</div>
+        </div>
+
+        <div class="row" style="padding:10px;">
+            <div class="col-md-6">Tax</div>
+            <div class="col-md-6" style="border-bottom:1px solid;height: 20px;">&nbsp;</div>
+        </div>
+
+        <div class="row" style="padding:10px;">
+            <div class="col-md-6">Tax Amount</div>
+            <div class="col-md-6" style="border-bottom:1px solid;height: 20px;">&nbsp;</div>
+        </div>
+
+        <div class="row" style="padding:10px;">
+            <div class="col-md-6">Package</div>
+            <div class="col-md-6" style="border-bottom:1px solid;height: 20px;">&nbsp;</div>
+        </div>
+        <div class="row" style="padding:10px;">
+        <div class="col-md-6">Admission / Consultation Charges</div>
+            <div class="col-md-6" style="border-bottom:1px solid;height: 20px;">{{ $bill->consultation + $bill->misc }}</div>
+      
+    </div>      
+    </div>
+        
+    </div>
+
+                            </div>
+
+                            <div class="add_ph_outer">
+                                <div class="profile-details" style="width:100%">
+                                   
                                     <div class="profile-details" style="width:100%">
                                         <div class="patient-card-detail"><label
                                                     style="width:35%">By Cash/Bakers Cheque/D.D. NO</label> <span

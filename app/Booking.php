@@ -1640,9 +1640,10 @@ class Booking extends Model
     {
         $payable = $this->getPayableAmount($discharge);
         $paid = $this->getPaidAmount();
-
+        $refund = $this->getPaidAmount(true);
+        $payable = $payable + $refund;
         if ($paid < $payable) {
-            return $payable - $paid + $this->getPaidAmount(true);
+            return $payable - $paid;
         }
 
         return 0;
@@ -2018,9 +2019,10 @@ class Booking extends Model
         $payable = $this->getPayableAmount($discharge);
         $paid = $this->getPaidAmount();
         $refund = $this->getPaidAmount(true);
+        $payable = $payable + $refund;
 
         if ($paid > $payable) {
-            return ($paid - $payable) - $refund;
+            return ($paid - $payable);
         }
 
         return 0;
