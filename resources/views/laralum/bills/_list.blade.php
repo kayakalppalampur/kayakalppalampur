@@ -9,6 +9,7 @@
     $ayurveda = 0;
     $lab = 0;
     $room_rent = 0;
+    $opd_consultation = 0;
 @endphp
 
 
@@ -78,26 +79,30 @@
                data-action="{{ url('admin/bills') }}?page={{ @$_REQUEST['page'] }}&per_page={{ @$_REQUEST['per_page'] }}">
             <thead>
             <tr>
+            @if(!isset($print))
+                    <th>Actions</th>
+                @endif
                 <th>Bill Date</th>
                 <th>Bill No.</th>
                 <th>Name</th>
                 <th>Bill Amount</th>
                 <th>Discount</th>
                 <th>Consultation</th>
+                <th>OPD Consultation</th>
                 <th>Naturopathy</th>
                 <th>Physiotherapy</th>
                 <th>Ayurveda</th>
                 <th>Lab</th>
                 <th>Room Rent</th>
-                @if(!isset($print))
-                    <th>Actions</th>
-                @endif
+               
             </tr>
             </thead>
             <tbody>
             @if(!isset($print))
                 <tr class="table_search">
-
+                <td>
+                        &nbsp;
+                    </td>
                 <td class="icons">
                     <input type="text" class="table_search" id="table_search_bill_date"
                            value="{{ @$search_data['bill_date'] }}"
@@ -105,6 +110,7 @@
                            placeholder="Search Bill Date"/> <i
                             class="fa fa-filter"></i>
                 </td>
+                    
                     <td>
                         &nbsp;
                     </td>
@@ -143,6 +149,7 @@
                 $bill_amount = $bill_amount + $bill->bill_amount;
                 $discount = $discount + $bill->discount;
                 $consultation = $consultation + $bill->consultation;
+                $opd_consultation = $opd_consultation + $bill->opd_consultation;
                 $physiotherapy = $physiotherapy + $bill->physiotherapy;
                 $naturopathy_and_yoga = $naturopathy_and_yoga + $bill->naturopathy_and_yoga;
                 $ayurveda = $ayurveda + $bill->ayurveda;
@@ -150,18 +157,7 @@
                 $room_rent = $room_rent + $bill->room_rent;
             @endphp
                 <tr>
-                    <td style="white-space:nowrap;">{{ $bill->bill_date }}</td>
-                    <td>{{ $bill->bill_no }}</td>
-                    <td>{{ $bill->booking->getProfile('first_name').' '.$bill->booking->getProfile('last_name') }}</td>
-                    <td>{{ $bill->bill_amount }}</td>
-                    <td>{{ $bill->discount }}</td>
-                    <td>{{ $bill->consultation }}</td>               
-                    <td>{{ $bill->naturopathy_and_yoga }}</td>
-                    <td>{{ $bill->physiotherapy }}</td>
-                    <td>{{ $bill->ayurveda }}</td>
-                    <td>{{ $bill->lab }}</td>
-                    <td>{{ $bill->room_rent }}</td>
-                    @if(!isset($print))
+                @if(!isset($print))
                         <td>
                               <div>
                                     @if(Laralum::loggedInUser()->hasPermission('admin.admin_settings.bills'))
@@ -179,6 +175,24 @@
                                 </div>
                         </td>
                     @endif
+                    <td style="white-space:nowrap;">{{ $bill->bill_date }}</td>
+                    <td>{{ $bill->bill_no }}</td>
+                    @if($bill->opdToken)
+                    <td>{{ $bill->opdToken->first_name.' '.$bill->opdToken->last_name }}</td>
+                   
+                 @else
+                    <td>{{ $bill->booking->getProfile('first_name').' '.$bill->booking->getProfile('last_name') }}</td>
+                   @endif
+                    <td>{{ $bill->bill_amount }}</td>
+                    <td>{{ $bill->discount }}</td>
+                    <td>{{ $bill->consultation }}</td>  
+                    <td>{{ $bill->opd_consultation }}</td>             
+                    <td>{{ $bill->naturopathy_and_yoga }}</td>
+                    <td>{{ $bill->physiotherapy }}</td>
+                    <td>{{ $bill->ayurveda }}</td>
+                    <td>{{ $bill->lab }}</td>
+                    <td>{{ $bill->room_rent }}</td>
+                    
                 </tr>
             @endforeach
             </tbody>
@@ -186,6 +200,10 @@
             <td class="icons">
                     <b>Grand Total</b>
                     </td>
+                    <td>
+                        &nbsp;
+                    </td>
+                    
                     <td>
                         &nbsp;
                     </td>
@@ -201,6 +219,9 @@
                     <td>
                     <b>  {{ $consultation }}</b>
                     </td>
+                     <td>
+                    <b>  {{ $opd_consultation }}</b>
+                    </td>                    
                     <td>
                     <b>{{ $naturopathy_and_yoga }}</b>
                     </td>
@@ -216,7 +237,6 @@
                     <td>
                     <b>{{ $room_rent }}</b>
                     </td>
-                    <td>&nbsp;</td>
             </tfoot>
         </table>
     </div>
@@ -239,6 +259,7 @@
                 <th>Bill Amount</th>
                 <th>Discount</th>
                 <th>Consultation</th>
+                <th>OPD Consultation</th>
                 <th>Naturopathy</th>
                 <th>Physiotherapy</th>
                 <th>Ayurveda</th>
@@ -258,6 +279,9 @@
                            placeholder="Search Bill Date"/> <i
                             class="fa fa-filter"></i>
                 </td>
+                    <td>
+                        &nbsp;
+                    </td>
                     <td>
                         &nbsp;
                     </td>
