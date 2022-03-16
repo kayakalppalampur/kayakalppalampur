@@ -163,8 +163,8 @@
         </div>
         <div class="row" style="padding:10px;">
         <div class="col-sm-6 col-md-6 col-xs-6">Admission / Consultation Charges</div>
-            <div class="col-sm-6 col-md-6 col-xs-6" style="border-bottom:1px solid;height: 20px;">{{ $bill->consultation + $bill->misc }}</div>
-      
+               <div class="col-sm-6 col-md-6 col-xs-6" style="border-bottom:1px solid;height: 20px;">{{ $bill->misc }}</div>
+        
     </div>      
     </div>
         

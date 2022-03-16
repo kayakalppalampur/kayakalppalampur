@@ -2585,7 +2585,7 @@ $final_kid = 1;
         $bill->created_by = \Auth::user()->id;
         $bill->bill_no = Bill::getID();
         $bill->bill_date = date("d-m-Y");      
-        $bill->consultation = $this->getConsultationAmountWithoutBill();
+        $bill->consultation = $this->patient_type === self::PATIENT_TYPE_IPD ? 0 : $this->getConsultationAmountWithoutBill();
         $bill->room_rent =  $this->getAccomodationAmount(true, true);
         $bill->diet = $this->getDietAmountWithoutBill();
         $bill->treatments = $this->getTreatmentsAmountWithoutBill();
