@@ -7360,7 +7360,7 @@ or search by other options";
         $token->mobile = $request->get('mobile');
         $token->gender = $request->get('gender');
         $token->profession = $profession_id;
-        $token->dob = $request->get('dob');
+        $token->dob = date('Y-m-d', strtotime($request->get('dob')));
         $token->address = $request->get('address');
         $token->city = $request->get('city');
         $token->state = $request->get('state');
