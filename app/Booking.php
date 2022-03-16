@@ -1987,7 +1987,11 @@ class Booking extends Model
                 }
             }
         }
-
+        
+        $consul_amount = $this->getConsultationAmountWithoutBill();
+        if ($consul_amount > 0) {
+            $price - $consul_amount;
+        }
         return $price;
     }
 
