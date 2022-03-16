@@ -2523,7 +2523,9 @@ class Booking extends Model
     public function getConsultationAmountWithoutBill()
     {
         $tokens = OpdTokens::with('bill')->doesntHave('bill')->where('booking_id', $this->id)
-         ->where('created_at', '<=', date('Y-m-d H:i:s'))->get();
+         ->where('created_at', '<=', date('Y-m-d H:i:s'))
+         ->get();
+         
         $price = 0;
         foreach ($tokens as $token) {
             $price += $token->charges;

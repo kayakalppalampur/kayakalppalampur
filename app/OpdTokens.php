@@ -138,4 +138,27 @@ class OpdTokens extends Model
         $token = OpdTokens::where('date', (string)date('Y-m-d'))->orderBy('id', 'desc')->count();
         return (int)$token + 1;
     }
+
+    public function updateOpdBills($booking) {
+        $bill = Bill::where('opd_token_id', $this->id)->where('opd_consultation', $this->charges )->first();
+
+        if($bill) {
+            $bill->booking_id = $booking->id;
+            $bill->save();
+            $this->bill_id = $bill->id;
+            $this->save();
+
+            $payments = Wallet::doesntHave('bill')->where([
+                'booking_id' => $this->id,
+                'status' => Wallet::STATUS_PAID
+            ])->where('created_at', '<=', date('Y-m-d H:i:s'))->get();
+
+            foreach ($payments as $payment) {
+                $payment->bill_id = $bill->id;
+                $payment->save();    
+            }
+        }
+
+       
+    }
 }

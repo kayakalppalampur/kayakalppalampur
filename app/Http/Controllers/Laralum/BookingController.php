@@ -349,11 +349,16 @@ or search by other options";
             $pagination = false;
         }
         if (\Auth::user()->isDoctor()) {
-            $models = Booking::select('bookings.*')->where('bookings.check_in_date', '<=', date('Y-m-d h:i:s'))->join('users', 'users.id', '=', 'bookings.user_id')->join('user_profiles', 'user_profiles.id', 'bookings.profile_id')->orderBy('bookings.created_at', 'DESC');
+            $models = Booking::select('bookings.*')
+            ->where('bookings.check_in_date', '<=', date('Y-m-d H:i:s'))
+            ->join('users', 'users.id', '=', 'bookings.user_id')
+            ->join('user_profiles', 'user_profiles.id', '=', 'bookings.profile_id')
+            ->orderBy('bookings.created_at', 'DESC');
         } else {
             $models = Booking::select('bookings.*')->join('users', 'users.id', '=', 'bookings.user_id')->join('user_profiles', 'user_profiles.id', 'bookings.profile_id')->orderBy('bookings.created_at', 'DESC');
         }
 
+        // echo '<pre>'; print_r($models->get());exit;
         if (\Auth::user()->isDoctor()) {
             $models = $models->whereIn('status', [Booking::STATUS_COMPLETED]);
         } else {
@@ -361,8 +366,10 @@ or search by other options";
 
         }
 
-        $models_query = $models->where('user_profiles.patient_type', UserProfile::PATIENT_TYPE_OPD);
-        //echo '<pre>'; print_r($models->get());exit;
+        
+        // echo '<pre>'; print_r($models->get());exit;
+        $models_query = $models->where('bookings.patient_type', Booking::PATIENT_TYPE_OPD);
+      
 
         $malefemale_query = clone $models_query;
         $models = clone $models_query;
@@ -7420,7 +7427,8 @@ or search by other options";
         $booking->profile_id = $userProfile->id;
         $booking->booking_id = $booking->getIdNumber();
         $booking->save();
-
+        
+        
         $userAddress->address1 = $token->address;
         $userAddress->city = $token->city;
         $userAddress->state = $token->state;
@@ -7470,6 +7478,10 @@ or search by other options";
         $token->booking_id = $booking->id;
         $token->patient_id = $booking->user_id;
         $token->save();
+
+        if ($booking)
+            $token->updateOpdBills($booking);
+
         return redirect()->back()->with('success', 'Successfully converted to OPD Patient');
     }
 
