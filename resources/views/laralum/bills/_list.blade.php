@@ -190,9 +190,11 @@
                     @if($bill->opdToken)
                     <td>{{ $bill->opdToken->first_name.' '.$bill->opdToken->last_name }}</td>
                    
-                 @else
+                 @elseif($bill->booking)
                     <td>{{ $bill->booking->getProfile('first_name').' '.$bill->booking->getProfile('last_name') }}</td>
-                   @endif
+                @else
+                <td>&nbsp;</td>
+                    @endif
                     <td>{{ $bill->bill_amount }}</td>
                     <td>{{ $bill->discount }}</td>
                     <td>{{ $bill->consultation }}</td>  
