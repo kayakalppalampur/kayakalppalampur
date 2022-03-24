@@ -149,7 +149,7 @@ class OpdTokens extends Model
             $this->save();
 
             $payments = Wallet::doesntHave('bill')->where([
-                'booking_id' => $this->id,
+                'booking_id' => $booking->id,
                 'status' => Wallet::STATUS_PAID
             ])->where('created_at', '<=', date('Y-m-d H:i:s'))->get();
 

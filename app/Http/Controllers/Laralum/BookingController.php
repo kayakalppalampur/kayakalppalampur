@@ -7426,6 +7426,7 @@ or search by other options";
         $booking->status = Booking::STATUS_COMPLETED;
         $booking->profile_id = $userProfile->id;
         $booking->booking_id = $booking->getIdNumber();
+        $booking->booking_kid = User::getId("K-OPD", $booking->getKIdNumber());
         $booking->save();
         
         
