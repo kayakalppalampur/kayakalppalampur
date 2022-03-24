@@ -212,6 +212,7 @@
             <td class="icons">
                     <b>Grand Total</b>
                     </td>
+
                     <td>
                         &nbsp;
                     </td>
@@ -222,6 +223,11 @@
                     <td>
                     &nbsp;
                     </td>
+                    @if(!isset($print))
+                    <td>
+                    &nbsp;
+                    </td>
+                    @endif
                     <td>
                     <b> {{ $bill_amount }}</b>
                     </td>
