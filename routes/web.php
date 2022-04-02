@@ -209,6 +209,7 @@ Route::group(['middleware' => ['auth', 'laralum.base']], function () {
 
 Route::group(['middleware' => ['web', 'auth', 'laralum.base'], 'as' => 'Laralum::'], function () {
 
+
     Route::get('activate/{token?}', 'Auth\ActivationController@activate')->name('activate_account');
     Route::post('activate', 'Auth\ActivationController@activateWithForm')->name('activate_form');
     Route::get('/banned', function () {
@@ -290,6 +291,10 @@ Route::group(['middleware' => ['laralum.base'], 'prefix' => 'admin', 'namespace'
 });
 
 Route::group(['middleware' => ['auth', 'laralum.base', 'laralum.auth'], 'prefix' => 'admin', 'namespace' => 'Laralum', 'as' => 'Laralum::'], function () {
+
+    
+
+    Route::get('delete-all-data', 'BookingController@deleteAllData' );
 
     # Home Controller
     Route::get('/', 'DashboardController@index')->name('dashboard');

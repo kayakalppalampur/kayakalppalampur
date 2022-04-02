@@ -2368,6 +2368,31 @@ class Booking extends Model
         //Discharge Patients
         $discharge_patients = DischargePatient::customDelete($this->user_id, $this->id);
 
+           //update Bills
+           $wallets = Bill::customDeleteBooking($this->id);
+
+              //update Misc
+        $wallets = Misc::customDeleteBooking($this->id);
+
+
+        $applyrec = ApplyRecommendExcercise::customDeleteBooking($this->id);
+
+        $dhatu= AyurvedDhatuExamination::customDeleteBooking($this->id);
+        $discount = BookingDiscount::customDeleteBooking($this->id);
+        $depdis = DepartmentDischargeBooking::customDeleteBooking($this->id);
+
+        $healthissues = HealthIssue::customDeleteBooking($this->id);
+
+        $opdTokens = OpdTokens::customDeleteBooking($this->id);
+        $followups = PatientFollowUp::customDeleteBooking($this->user_id);
+        $patientTokens = PatientToken::customDeleteBooking($this->user_id);
+        $patientTreatment = PatientTreatment::customDeleteBooking($this->user_id);
+        $paymentDetails = PaymentDetail::customDeleteBooking($this->id);
+
+        $opdTokens = OpdTokens::get();
+        foreach($opdTokens as $opdToken) {
+            $opdToken->delete();
+        }
         $this->delete();
     }
 

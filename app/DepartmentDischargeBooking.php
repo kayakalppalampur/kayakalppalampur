@@ -26,5 +26,12 @@ class DepartmentDischargeBooking extends Model
     {
         return $this->belongsTo(Department::class, 'department_id');
     }
+    public static function customDeleteBooking($b_id)
+    {
+        $models = self::where('booking_id', $b_id)->get();
+        foreach ($models as $model) {
+            $model->delete();
+        }
+    }
 
 }

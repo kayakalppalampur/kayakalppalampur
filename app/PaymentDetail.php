@@ -24,7 +24,15 @@ class PaymentDetail extends Model
     {
         return $this->hasOne('App\User', 'user_id');
     }
-
+    
+    public static function customDeleteBooking($b_id)
+    {
+        $models = self::where('booking_id', $b_id)->get();
+        foreach ($models as $model) {
+            $model->delete();
+        }
+    }
+    
     public function booking()
     {
         return $this->belongsTo('App\Booking', 'booking_id');

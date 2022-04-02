@@ -22,6 +22,15 @@ class PatientTreatment extends Model
         'price'
     ];
 
+
+    public static function customDeleteBooking($b_id)
+    {
+        $models = self::where('patient_id', $b_id)->get();
+        foreach ($models as $model) {
+            $model->delete();
+        }
+    }
+    
     protected $table = 'patient_treatments';
 
     public function patient()

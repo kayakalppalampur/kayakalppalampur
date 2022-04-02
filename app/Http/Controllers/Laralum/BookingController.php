@@ -8412,5 +8412,25 @@ return ['success' => true];
 
     }
 
+    public function deleteAllData() {
+
+        $bookings = Booking::get();
+
+        foreach($bookings as $booking) {
+            $booking->customDelete();
+        }
+
+        $users = User::whereNotNull('uhid')->get();
+
+        foreach($users as $user) {
+            $user->delete();
+        }
+
+
+
+        //User
+
+    }
+
 }
 

@@ -22,6 +22,14 @@ class PatientFollowUp extends Model
         return $this->belongsTo('App\DischargePatient', 'patient_id');
     }
 
+    public static function customDeleteBooking($b_id)
+    {
+        $models = self::where('patient_id', $b_id)->get();
+        foreach ($models as $model) {
+            $model->delete();
+        }
+    }
+
     public function doctor()
     {
         return $this->belongsTo('App\User', 'doctor_id');

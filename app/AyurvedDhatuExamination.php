@@ -236,6 +236,14 @@ class AyurvedDhatuExamination extends Model
         }
     }
 
+    public static function customDeleteBooking($b_id)
+    {
+        $models = self::where('booking_id', $b_id)->get();
+        foreach ($models as $model) {
+            $model->delete();
+        }
+    }
+
     public function getRasGrowthDecay()
     {
         return [
